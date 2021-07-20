@@ -4,3 +4,6 @@ vendor.camera.remapid=0 1 20 21 61
 # Fingerprint
 persist.vendor.fingerprint.type=udfps_optical
 persist.vendor.fingerprint.sensor_location=360|1423|67
+
+# SurfaceFlinger
+debug.sf.layer_caching_active_layer_timeout_ms=1000
