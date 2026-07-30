@@ -8,11 +8,13 @@
 
 #include "UdfpsHandler.h"
 
-#include <aidl/android/hardware/biometrics/fingerprint/BnFingerprint.h>
 #include <android-base/logging.h>
+#include <chrono>
 #include <fcntl.h>
 #include <fstream>
+#include <mutex>
 #include <poll.h>
+#include <stdint.h>
 #include <thread>
 #include <unistd.h>
 
@@ -20,7 +22,7 @@
 #define PARAM_NIT_FOD 1
 #define PARAM_NIT_NONE 0
 
-using ::aidl::android::hardware::biometrics::fingerprint::AcquiredInfo;
+static constexpr auto kFodDisableDelay = std::chrono::milliseconds(1000);
 
 template <typename T>
 static void set(const std::string& path, const T& value) {
@@ -33,9 +35,7 @@ static const char* kFodUiPaths[] = {
         "/sys/devices/platform/soc/soc:qcom,dsi-display/fod_ui",
 };
 
-static const char* kFodStatusPaths[] = {
-        "/sys/class/touch/tp_dev/fod_status",
-};
+static const char* kFodStatusPath = "/sys/class/touch/tp_dev/fod_status";
 
 static bool readBool(int fd) {
     char c;
@@ -58,11 +58,11 @@ static bool readBool(int fd) {
 
 class LaurelSproutUdfpsHandler : public UdfpsHandler {
   public:
-    void init(fingerprint_device_t *device) {
+    void init(fingerprint_device_t* device) {
         mDevice = device;
 
         std::thread([this]() {
-            int fd;
+            int fd = -1;
             for (auto& path : kFodUiPaths) {
                 fd = open(path, O_RDONLY);
                 if (fd >= 0) {
@@ -71,16 +71,8 @@ class LaurelSproutUdfpsHandler : public UdfpsHandler {
             }
 
             if (fd < 0) {
-                LOG(ERROR) << "failed to open fd, err: " << fd;
+                LOG(ERROR) << "failed to open fod_ui, err: " << fd;
                 return;
-            }
-
-            int fodStatusFd;
-            for (auto& path : kFodStatusPaths) {
-                fodStatusFd = open(path, O_RDWR);
-                if (fodStatusFd >= 0) {
-                    break;
-                }
             }
 
             struct pollfd fodUiPoll = {
@@ -92,44 +84,106 @@ class LaurelSproutUdfpsHandler : public UdfpsHandler {
             while (true) {
                 int rc = poll(&fodUiPoll, 1, -1);
                 if (rc < 0) {
-                    LOG(ERROR) << "failed to poll fd, err: " << rc;
+                    LOG(ERROR) << "failed to poll fod_ui, err: " << rc;
                     continue;
                 }
 
-                mDevice->extCmd(mDevice, COMMAND_NIT,
-                                readBool(fd) ? PARAM_NIT_FOD : PARAM_NIT_NONE);
-                if (fodStatusFd >= 0) {
-                    write(fodStatusFd, readBool(fd) ? "1" : "0", 1);
+                const bool requested = readBool(fd);
+                std::lock_guard<std::mutex> lock(mFodMutex);
+                mFodUiRequested = requested;
+
+                if (requested) {
+                    ++mStateGeneration;
+                    setFodStateLocked(true);
+                } else if (!mFingerDown) {
+                    scheduleDisableLocked();
                 }
             }
         }).detach();
     }
 
     void onFingerDown(uint32_t /*x*/, uint32_t /*y*/, float /*minor*/, float /*major*/) {
-        // nothing
+        std::lock_guard<std::mutex> lock(mFodMutex);
+        mFingerDown = true;
+        ++mStateGeneration;
+        setFodStateLocked(true);
     }
 
     void onFingerUp() {
-        // nothing
-    }
-
-    void onAcquired(int32_t result, int32_t vendorCode) {
-        if (static_cast<AcquiredInfo>(result) == AcquiredInfo::GOOD) {
-            set(kFodStatusPaths[0], 0);
-        } else if (vendorCode == 23) {
-            /*
-             * vendorCode = 23 waiting for fingerprint authentication on popups
-             */
-            mDevice->extCmd(mDevice, COMMAND_NIT, PARAM_NIT_FOD);
-            set(kFodStatusPaths[0], 1);
+        std::lock_guard<std::mutex> lock(mFodMutex);
+        mFingerDown = false;
+        if (!mFodUiRequested) {
+            scheduleDisableLocked();
         }
     }
 
-    void cancel() {
-        // nothing
+    void onAcquired(int32_t /*result*/, int32_t vendorCode) {
+        if (vendorCode != 23) {
+            return;
+        }
+
+        /*
+         * Goodix uses vendor code 23 while waiting for another capture.
+         * Keep FOD active across enrollment samples instead of interpreting
+         * every successful sample as the end of the operation.
+         */
+        std::lock_guard<std::mutex> lock(mFodMutex);
+        ++mStateGeneration;
+        setFodStateLocked(true);
     }
+
+    void cancel() {
+        std::lock_guard<std::mutex> lock(mFodMutex);
+        mFingerDown = false;
+        mFodUiRequested = false;
+        ++mStateGeneration;
+        setFodStateLocked(false);
+    }
+
   private:
-    fingerprint_device_t *mDevice;
+    void scheduleDisableLocked() {
+        const uint64_t generation = ++mStateGeneration;
+
+        std::thread([this, generation]() {
+            std::this_thread::sleep_for(kFodDisableDelay);
+
+            std::lock_guard<std::mutex> lock(mFodMutex);
+            if (generation == mStateGeneration && !mFingerDown && !mFodUiRequested) {
+                setFodStateLocked(false);
+            }
+        }).detach();
+    }
+
+    void setGoodixFodStateLocked(bool enabled) {
+        if (mGoodixFodEnabled == enabled) {
+            return;
+        }
+
+        mDevice->extCmd(mDevice, COMMAND_NIT, enabled ? PARAM_NIT_FOD : PARAM_NIT_NONE);
+        mGoodixFodEnabled = enabled;
+    }
+
+    void setTouchFodModeLocked(bool enabled) {
+        if (mTouchFodEnabled == enabled) {
+            return;
+        }
+
+        set(kFodStatusPath, enabled ? 1 : 0);
+        mTouchFodEnabled = enabled;
+    }
+
+    void setFodStateLocked(bool enabled) {
+        setGoodixFodStateLocked(enabled);
+        setTouchFodModeLocked(enabled);
+    }
+
+    fingerprint_device_t* mDevice;
+    std::mutex mFodMutex;
+    bool mFodUiRequested = false;
+    bool mFingerDown = false;
+    bool mGoodixFodEnabled = false;
+    bool mTouchFodEnabled = false;
+    uint64_t mStateGeneration = 0;
 };
 
 static UdfpsHandler* create() {
@@ -141,6 +195,6 @@ static void destroy(UdfpsHandler* handler) {
 }
 
 extern "C" UdfpsHandlerFactory UDFPS_HANDLER_FACTORY = {
-    .create = create,
-    .destroy = destroy,
+        .create = create,
+        .destroy = destroy,
 };
