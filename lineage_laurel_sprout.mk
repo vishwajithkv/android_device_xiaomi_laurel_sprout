@@ -16,7 +16,7 @@ $(call inherit-product, device/xiaomi/laurel_sprout/device.mk)
 
 # Mist OS
 MISTOS_MAINTAINER := "leoxvis"
-
+TARGET_ENABLE_BLUR := false
 
 PRODUCT_NAME := lineage_laurel_sprout
 PRODUCT_DEVICE := laurel_sprout
