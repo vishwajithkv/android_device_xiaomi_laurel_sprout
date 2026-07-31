@@ -105,6 +105,7 @@ class LaurelSproutUdfpsHandler : public UdfpsHandler {
     void onFingerDown(uint32_t /*x*/, uint32_t /*y*/, float /*minor*/, float /*major*/) {
         std::lock_guard<std::mutex> lock(mFodMutex);
         mFingerDown = true;
+        mIgnoreVendorWait = false;
         ++mStateGeneration;
         setFodStateLocked(true);
     }
@@ -128,19 +129,41 @@ class LaurelSproutUdfpsHandler : public UdfpsHandler {
          * every successful sample as the end of the operation.
          */
         std::lock_guard<std::mutex> lock(mFodMutex);
+        // Goodix may send this after an authentication result; wait for a new finger-down.
+        if (mIgnoreVendorWait) {
+            return;
+        }
+
         ++mStateGeneration;
         setFodStateLocked(true);
+    }
+
+    void onAuthenticationSucceeded() override {
+        finishAuthentication();
+    }
+
+    void onAuthenticationFailed() override {
+        finishAuthentication();
     }
 
     void cancel() {
         std::lock_guard<std::mutex> lock(mFodMutex);
         mFingerDown = false;
         mFodUiRequested = false;
+        mIgnoreVendorWait = true;
         ++mStateGeneration;
         setFodStateLocked(false);
     }
 
   private:
+    void finishAuthentication() {
+        std::lock_guard<std::mutex> lock(mFodMutex);
+        mFingerDown = false;
+        mIgnoreVendorWait = true;
+        ++mStateGeneration;
+        setFodStateLocked(false);
+    }
+
     void scheduleDisableLocked() {
         const uint64_t generation = ++mStateGeneration;
 
@@ -183,6 +206,7 @@ class LaurelSproutUdfpsHandler : public UdfpsHandler {
     bool mFingerDown = false;
     bool mGoodixFodEnabled = false;
     bool mTouchFodEnabled = false;
+    bool mIgnoreVendorWait = false;
     uint64_t mStateGeneration = 0;
 };
 
