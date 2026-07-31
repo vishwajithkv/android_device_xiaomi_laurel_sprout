@@ -6,3 +6,10 @@
 
 soong_namespace {
 }
+
+prebuilt_media {
+    name: "bootanimation-laurel.zip",
+    src: "bootanimation/bootanimation-laurel.zip",
+    filename: "bootanimation-laurel.zip",
+    product_specific: true,
+}
