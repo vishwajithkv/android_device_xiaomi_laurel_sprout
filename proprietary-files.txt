@@ -67,6 +67,9 @@ vendor/lib64/libseemore.so
 vendor/lib64/libsns_device_mode_stub.so
 vendor/lib64/libsns_low_lat_stream_stub.so
 
+# Display
+system/apex/com.android.vndk.current/lib/android.frameworks.displayservice@1.0.so:vendor/lib/android.frameworks.displayservice@1.0.so
+
 # Camera-Actuator
 vendor/lib/libactuator_ad5816g.so
 vendor/lib/libactuator_ad5823.so
