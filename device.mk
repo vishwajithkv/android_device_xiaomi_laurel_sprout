@@ -65,6 +65,8 @@ TARGET_BOARD_FASTBOOT_INFO_FILE := $(DEVICE_PATH)/fastboot-info.txt
 
 # Rootdir
 PRODUCT_PACKAGES += \
+    fstab.default \
+    fstab.default.vendor \
     fstab.qcom \
     laurel_boot_logger
 

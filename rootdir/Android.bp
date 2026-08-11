@@ -25,3 +25,20 @@ prebuilt_etc {
     src: "etc/fstab.qcom",
     vendor: true,
 }
+
+// First-stage init runs from system-as-root and the bootloader supplies
+// androidboot.fstab_suffix=default, before /vendor is available.
+prebuilt_etc {
+    name: "fstab.default",
+    src: "etc/fstab.qcom",
+}
+
+// Late userspace consumers such as the boot-control HAL search /vendor before
+// /system. Keep a vendor-labeled copy so vendor domains can read the default
+// fstab without being granted access to generic system_file objects.
+prebuilt_etc {
+    name: "fstab.default.vendor",
+    src: "etc/fstab.qcom",
+    filename: "fstab.default",
+    vendor: true,
+}
