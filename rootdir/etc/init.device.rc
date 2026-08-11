@@ -26,3 +26,17 @@
 #
 
 import /vendor/etc/init/hw/init.fingerprint.rc
+
+# Keep normal-boot diagnostics on metadata because recovery-as-boot replaces
+# the failed Android boot's in-memory logs. The logger uses a new boot UUID
+# directory every time and never removes logs from earlier boots.
+on post-fs
+    mkdir /metadata/boot-debug 0700 root root
+    restorecon_recursive /metadata/boot-debug
+    start laurel_boot_logger
+
+service laurel_boot_logger /system_ext/bin/laurel_boot_logger
+    class core
+    user root
+    group root log
+    disabled

@@ -1,0 +1,15 @@
+//
+// Copyright (C) 2026 The LineageOS Project
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+cc_binary {
+    name: "laurel_boot_logger",
+    srcs: ["laurel_boot_logger.cpp"],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+    system_ext_specific: true,
+}
