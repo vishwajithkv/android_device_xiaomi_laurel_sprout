@@ -28,4 +28,10 @@
 
     <!-- The radius of the enrollment progress bar, in dp -->
     <integer name="config_udfpsEnrollProgressBar" translatable="false">72</integer>
+
+    <!-- Keep the footer away from the bottom-center UDFPS sensor. -->
+    <bool name="config_useLegacyUdfpsUi" translatable="false">true</bool>
+
+    <!-- Enrollment is immersive on this device; restore navigation on exit. -->
+    <bool name="config_hideNavigationBarDuringUdfpsEnrollment" translatable="false">true</bool>
 </resources>
