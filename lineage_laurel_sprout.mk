@@ -20,6 +20,8 @@ PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := Mi A3
 
+WITH_GMS := false
+
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 BUILD_FINGERPRINT := Xiaomi/laurel_sprout/laurel_sprout:11/RKQ1.200903.002/V12.0.26.0.RFQMIXM:user/release-keys
