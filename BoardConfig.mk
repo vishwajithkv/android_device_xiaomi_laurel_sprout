@@ -23,6 +23,8 @@ TARGET_NO_RECOVERY := true
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := laurel_sprout
 
+BOARD_KERNEL_CMDLINE += androidboot.boot_devices=soc/4804000.ufshc
+
 # Display
 TARGET_SCREEN_DENSITY := 320
 
