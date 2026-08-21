@@ -24,6 +24,10 @@ TARGET_NO_RECOVERY := true
 TARGET_BOOTLOADER_BOARD_NAME := laurel_sprout
 
 BOARD_KERNEL_CMDLINE += androidboot.boot_devices=soc/4804000.ufshc
+BOARD_KERNEL_CMDLINE += earlycon=qcom_geni,0x4a90000
+BOARD_KERNEL_CMDLINE += qcom_geni_serial.con_enabled=1
+BOARD_KERNEL_CMDLINE += ignore_loglevel loglevel=8 initcall_debug
+BOARD_KERNEL_CMDLINE += panic=10 laurel_panic_after=30
 
 # Display
 TARGET_SCREEN_DENSITY := 320
