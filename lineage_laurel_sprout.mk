@@ -14,6 +14,15 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Inherit from laurel_sprout device
 $(call inherit-product, device/xiaomi/laurel_sprout/device.mk)
 
+# AxionOS
+AXION_CAMERA_REAR_INFO := 48,8,2
+AXION_CAMERA_FRONT_INFO := 32
+AXION_MAINTAINER := leoxvis
+AXION_PROCESSOR := Snapdragon_665
+
+TARGET_INCLUDES_LOS_PREBUILTS := true
+TARGET_DISABLE_EPPE := true
+
 PRODUCT_NAME := lineage_laurel_sprout
 PRODUCT_DEVICE := laurel_sprout
 PRODUCT_MANUFACTURER := Xiaomi
