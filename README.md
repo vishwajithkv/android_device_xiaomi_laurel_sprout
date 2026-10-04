@@ -16,14 +16,15 @@ For a fresh sync, install both XML files from `local_manifests/` into
 `.repo/local_manifests/`. Keep the `zz-` filename: it replaces roomservice's
 downstream device selection after roomservice.xml is parsed. The kernel XML
 pins both the new 6.18 source and the existing 6.15 fallback. The device XML
-selects this ROM branch. Publish the local commits before syncing elsewhere.
+selects this ROM branch.
 
-This migration has not completed a build or been boot-tested. The first build
-failed in F2FS; the kernel now enables ACK's F2FS semaphore option and the
-tracing dependency required by Binder. These corrections await a rebuild.
-The previous 6.15 setup
-reached Android boot completion and Settings through scrcpy. That is the first
-6.18 acceptance target; source preparation is not a verified support claim.
+The maintainer's 2026-10-04 build booted recovery and normal Android 16 on
+slot B with `6.18.32-g47faf8ef4e7b`. Live ADB confirmed boot completion,
+running Zygote and SurfaceFlinger, and the launcher as the resumed activity.
+Physical GUI usability remains unverified: console contents remained visible,
+and the composer reported unsupported DRM VSync waits. The persistent boot
+logger exited early; diagnostics were saved directly through ADB. Native GPU,
+touch and encryption remain outside this verified boot milestone.
 Google's Android 17 kernel is being used as a custom board kernel on Android 16,
 not as a certified GKI image.
 
@@ -91,5 +92,4 @@ must not be formatted automatically to conceal a boot failure.
 The old kernel checkout `kernel/mainline/sm6125-mainline` remains unchanged.
 Switch this ROM device repository back to `lineage-23.2-6.15` to select it again,
 and use the original ROM output directory. Keep the matching previously built
-images for device recovery. Published manifests require the referenced 6.18
-kernel commits to be pushed; this migration is initially committed locally.
+images for device recovery. The manifests pin the published 6.18 kernel commits and select this ROM branch.
