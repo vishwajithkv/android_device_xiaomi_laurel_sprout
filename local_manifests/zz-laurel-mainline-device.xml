@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- Load after roomservice.xml so its downstream device selection is replaced. -->
+<manifest>
+  <remove-project name="LineageOS/android_device_xiaomi_laurel_sprout" optional="true" />
+  <project name="vishwajithkv/android_device_xiaomi_laurel_sprout" path="device/xiaomi/laurel_sprout" remote="github" revision="lineage-23.2-6.18" />
+</manifest>

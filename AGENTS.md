@@ -3,6 +3,8 @@
 Agents must read this file before touching this tree.
 
 - Device: Xiaomi Mi A3, laurel_sprout; SoC: SM6125 / Snapdragon 665 / Trinket.
+- Kernel: Google android17-6.18 ACK plus attributed Mi A3 hardware patches,
+  at kernel/mainline/sm6125-mainline-6.18. The 6.15 checkout is the fallback.
 - This is the existing ROM tree, converted at the maintainer's explicit request.
 - Read README.md and the kernel Documentation/android/FIRST_BOOT.md first.
 - Follow device/mainline/common/docs/ and hardware/mainline/common/docs/ when present.

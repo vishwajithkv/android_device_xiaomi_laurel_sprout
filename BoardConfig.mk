@@ -34,7 +34,7 @@ TARGET_SCREEN_DENSITY := 320
 $(call soong_config_set,minigbm_upstream,platform,generic)
 
 # Kernel
-include kernel/mainline/sm6125-mainline/Documentation/android/BoardConfigBringup.mk
+include kernel/mainline/sm6125-mainline-6.18/Documentation/android/BoardConfigBringup.mk
 # Merge after the kernel fragments to support the selected boot-control UAPI.
 TARGET_KERNEL_CONFIG_EXT := $(DEVICE_PATH)/configs/ufs-bsg.config \
     $(DEVICE_PATH)/configs/android-boot.config
