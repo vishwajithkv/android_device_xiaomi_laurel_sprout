@@ -18,7 +18,10 @@ downstream device selection after roomservice.xml is parsed. The kernel XML
 pins both the new 6.18 source and the existing 6.15 fallback. The device XML
 selects this ROM branch. Publish the local commits before syncing elsewhere.
 
-This migration has not been compiled or boot-tested. The previous 6.15 setup
+This migration has not completed a build or been boot-tested. The first build
+failed in F2FS; the kernel now enables ACK's F2FS semaphore option and the
+tracing dependency required by Binder. These corrections await a rebuild.
+The previous 6.15 setup
 reached Android boot completion and Settings through scrcpy. That is the first
 6.18 acceptance target; source preparation is not a verified support claim.
 Google's Android 17 kernel is being used as a custom board kernel on Android 16,
