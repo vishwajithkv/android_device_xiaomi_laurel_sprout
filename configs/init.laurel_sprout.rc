@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: Apache-2.0
+
+import /vendor/etc/init/hw/init.mainline.rc
+
+# Mainline has memfd plus the ashmem ioctl shim, not /dev/ashmem.
+on early-init
+    setprop sys.use_memfd true
+
+on post-fs
+    start laurel_boot_logger
+    exec -- /vendor/bin/init.laurel_sprout.mainline
+
+on late-fs
+    mount_all /vendor/etc/fstab.laurel_sprout --late
+
+# Temporary userdebug diagnostics; only the logger creates files after verifying metadata.
+service laurel_boot_logger /system_ext/bin/laurel_boot_logger
+    class core
+    user root
+    group root log
+    seclabel u:r:su:s0
+    disabled
+    oneshot

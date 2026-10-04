@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: Apache-2.0
+
+sh_binary {
+    name: "init.laurel_sprout.mainline",
+    src: "init.laurel_sprout.mainline.sh",
+    vendor: true,
+}

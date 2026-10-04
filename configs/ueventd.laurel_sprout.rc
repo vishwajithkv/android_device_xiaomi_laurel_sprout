@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+
+# Match Android's system heap permissions: software codecs and shell capture
+# also allocate buffers here, outside the graphics group.
+/dev/dma_heap/system 0444 system system
+/dev/dma_heap/system-uncached 0444 system system
+/dev/graphics/fb* 0660 system graphics

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<manifest>
+  <project name="LineageOS/android_device_mainline_common" path="device/mainline/common" remote="github" revision="5c5fd330f4cc0d7214eca65032b03c252b008f82" />
+  <project name="LineageOS/android_hardware_mainline_common" path="hardware/mainline/common" remote="github" revision="6939f596fe349e0531de191eb344c90a03662d26" />
+  <project name="LineageOS/android_kernel_mainline_configs" path="kernel/mainline/configs" remote="github" revision="1bf0c59fb857f4eadd02346f1dafedc4dbcdfafd" />
+  <project name="LineageOS/android_external_minigbm-upstream" path="external/minigbm-upstream" remote="github" revision="51b97430ef97474b386bc958d67e5171a86d0d76" />
+  <project name="LineageOS/android_external_linux-firmware-mainline" path="external/linux-firmware-mainline" remote="github" revision="ef88d24dfc10e30826789b82fca417d6f913ee2a" />
+  <project name="vishwajithkv/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline" remote="github" revision="63e1f779b9c4c60409b5ac074e5f1ad9050d43af" />
+</manifest>

@@ -1,82 +1,89 @@
-#
-# Copyright (C) 2021 The LineageOS Project
-#
 # SPDX-License-Identifier: Apache-2.0
-#
-
-# Inherit from sm6125-common
-$(call inherit-product, device/xiaomi/sm6125-common/common.mk)
+# Copyright (C) 2021 The LineageOS Project
 
 DEVICE_PATH := device/xiaomi/laurel_sprout
+
+# A/B
+AB_OTA_UPDATER := true
+TARGET_USES_MAINLINE_COMMON_AB_DEFS := true
+PRODUCT_PACKAGES += \
+    android.hardware.boot-service.qti \
+    android.hardware.boot-service.qti.recovery
+PRODUCT_PACKAGES_DEBUG += bootctl
+# Mainline exports standard UFS BSG UAPI, not Qualcomm 4.14 UFS query ioctls.
+$(call soong_config_set_bool,QTI_GPT_UTILS,USE_BSG_FRAMEWORK,true)
 
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
-# A/B
-PRODUCT_PACKAGES += \
-    android.hardware.boot-service.qti \
-    android.hardware.boot-service.qti.recovery
-
-$(call soong_config_set_bool,QTI_GPT_UTILS,USE_BSG_FRAMEWORK,false)
-
-PRODUCT_PACKAGES_DEBUG += \
-    bootctl
-
-AB_OTA_POSTINSTALL_CONFIG += \
-    RUN_POSTINSTALL_system=true \
-    POSTINSTALL_PATH_system=system/bin/otapreopt_script \
-    FILESYSTEM_TYPE_system=ext4 \
-    POSTINSTALL_OPTIONAL_system=true
-
-PRODUCT_PACKAGES += \
-    update_engine \
-    update_engine_sideload \
-    update_verifier
-
-PRODUCT_PACKAGES += \
-    checkpoint_gc \
-    otapreopt_script
-
-# Audio configs
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(DEVICE_PATH)/audio/,$(TARGET_COPY_OUT_VENDOR)/etc)
-
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1280
 TARGET_SCREEN_WIDTH := 720
 
-# Fingerprint
-PRODUCT_PACKAGES += \
-    libudfpshandler
+# Bringup options
+TARGET_INITIAL_BRINGUP := true
+TARGET_AUDIO_HAL := default-aidl
+TARGET_CAMERA_PROVIDER_HAL :=
+TARGET_BLUETOOTH_HAL :=
+TARGET_GRAPHICS := swiftshader
+TARGET_GRAPHICS_ALLOCATOR_HAL := minigbm-upstream
+TARGET_GRAPHICS_COMPOSER_HAL := drmfb-composer
+TARGET_MINIGBM_PLATFORM := generic
+TARGET_HAS_VIBRATOR := false
+TARGET_SENSORS_HAL :=
+TARGET_SUPPORTS_HARDWARE_BACKED_SECURITY := false
+TARGET_SUPPORTS_SUSPEND := false
+include device/mainline/common/optional/options.mk
+$(call inherit-product, device/mainline/common/mainline_common.mk)
 
-$(call soong_config_set,surfaceflinger,udfps_lib,//hardware/xiaomi:libudfps_extension.xiaomi)
-
-# Overlays
-DEVICE_PACKAGE_OVERLAYS += \
-    $(DEVICE_PATH)/overlay \
-    $(DEVICE_PATH)/overlay-lineage
-
-PRODUCT_PACKAGES += \
-    ApertureLaurel
+# Cgroups
+# API 28 adds downstream schedtune defaults; vendor overrides load last.
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/cgroups.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
+    $(DEVICE_PATH)/configs/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 # Fastboot
 TARGET_BOARD_FASTBOOT_INFO_FILE := $(DEVICE_PATH)/fastboot-info.txt
 
-# Rootdir
-PRODUCT_PACKAGES += \
-    fstab.qcom
+# Graphics
+PRODUCT_PACKAGES += libEGL_angle libGLESv1_CM_angle libGLESv2_angle
+# System ANGLE preserves SDK variants for its APK and matches EGL Loader.cpp.
+$(call soong_config_set_bool,angle,angle_in_vendor,false)
+# The upstream allocator uses the same cros_gralloc_handle ABI as minigbm.
+$(call soong_config_set_bool,drmfb_composer,uses_minigbm,true)
+PRODUCT_VENDOR_PROPERTIES += vendor.minigbm.generic_backend=dumb_generic
+# The watchdog trace shows Skia's startup cache warming compiling ANGLE
+# shaders while SurfaceFlinger and system_server wait for the first frame.
+# Skip optional precompilation while bringing up the software renderer.
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += service.sf.prime_shader_cache=false
 
-PRODUCT_PACKAGES += \
-    init.device.rc \
-    init.fingerprint.rc
+# Heap
+$(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
+
+# Init
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/fstab.laurel_sprout:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.laurel_sprout \
+    $(DEVICE_PATH)/configs/fstab.laurel_sprout:recovery/root/first_stage_ramdisk/system/etc/fstab.laurel_sprout \
+    $(DEVICE_PATH)/configs/fstab.laurel_sprout:recovery/root/system/etc/fstab.laurel_sprout \
+    $(DEVICE_PATH)/configs/init.laurel_sprout.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.laurel_sprout.rc \
+    $(DEVICE_PATH)/configs/init.recovery.laurel_sprout.rc:recovery/root/system/etc/init/init.recovery.laurel_sprout.rc \
+    $(DEVICE_PATH)/configs/ueventd.laurel_sprout.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.laurel_sprout.rc
+PRODUCT_PACKAGES += init.laurel_sprout.mainline laurel_boot_logger
+
+# Kernel compatibility
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
+
+# Properties
+PRODUCT_VENDOR_PROPERTIES += ro.radio.noril=true
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += persist.sys.usb.config=adb
 
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 28
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(DEVICE_PATH)
-
-# Inherit from vendor blobs
-$(call inherit-product, vendor/xiaomi/laurel_sprout/laurel_sprout-vendor.mk)
+    $(DEVICE_PATH) \
+    external/minigbm-upstream \
+    hardware/qcom-caf/bootctrl \
+    kernel/mainline/configs

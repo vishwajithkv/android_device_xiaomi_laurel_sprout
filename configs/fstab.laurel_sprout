@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+# Temporary unencrypted bringup profile, requested by the maintainer.
+# Preserve partition layout; no automatic formatting or encrypted-data conversion.
+# Declare vbmeta explicitly: the mainline DT does not supply Android vbmeta/parts.
+# First-stage system/vendor mounts precede the late userdata mount.
+/dev/block/by-name/system /system ext4 ro,barrier=1,discard wait,slotselect,avb=vbmeta,first_stage_mount
+/dev/block/by-name/vendor /vendor ext4 ro,barrier=1,discard wait,slotselect,avb=vbmeta,first_stage_mount
+/dev/block/by-name/metadata /metadata ext4 noatime,nosuid,nodev,discard wait,check,first_stage_mount
+/dev/block/by-name/misc /misc emmc defaults defaults
+/dev/block/by-name/userdata /data f2fs noatime,nosuid,nodev,discard,reserve_root=32768,resgid=1065,fsync_mode=nobarrier latemount,wait,check,quota,reservedsize=128M

@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+
+import /system/etc/init/init.recovery.mainline.rc
+import /system/etc/init/init.recovery.mainline.usb.rc
+
+on init
+    setprop sys.usb.controller 4e00000.usb
+
+on fs
+    mount configfs none /config nodev noexec nosuid
