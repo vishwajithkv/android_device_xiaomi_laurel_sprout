@@ -33,8 +33,9 @@ not as a certified GKI image.
 The kernel core, devicetrees and external modules are separate sibling Git
 repositories under kernel/mainline/: sm6125-mainline-6.18,
 sm6125-mainline-6.18-devicetrees and sm6125-mainline-6.18-modules.
-The device manifest pins all three. Publish the new source repositories and
-split branches before fresh network sync; they are initially local.
+The device manifest pins all three published source repositories, including
+`vishwajithkv/kernel_xiaomi_laurel_sprout-devicetrees` and
+`vishwajithkv/kernel_xiaomi_laurel_sprout-modules`.
 See kernel Documentation/android/SPLIT_SOURCES.md for the verified Lineage
 reference, ownership, build integration and fallback. The pre-split 6.18
 boot result above does not validate the refactor. No hardware was enabled.
