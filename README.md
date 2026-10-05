@@ -141,3 +141,12 @@ display transition after the ARGB8888 correction. Rendering remains software
 based and installation timing has not been quantified. Earlier pending status
 paragraphs describe the history, not the latest result. Apply the composer
 patch above as well as the system/core patch when recreating this build.
+
+## Modem bringup source stage
+
+Source pins now include the attributed laurel-connectivity PAS modem port.
+This stage has not been built or device validated. MPSS registers with manual
+startup; Android radio remains disabled until matching firmware, mainline RMTFS
+and a compatible radio HAL/data path are integrated. See kernel
+Documentation/android/MODEM.md. The validated pre-modem pins are kernel
+ff4152ad6d0f, devicetrees da7d0af and device 11e169e.
