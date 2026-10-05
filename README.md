@@ -40,6 +40,25 @@ See kernel Documentation/android/SPLIT_SOURCES.md for the verified Lineage
 reference, ownership, build integration and fallback. The pre-split 6.18
 boot result above does not validate the refactor. No hardware was enabled.
 
+## Native graphics: current source default
+
+configs/graphics-profile.mk now selects native graphics for the next full ROM
+build: Mesa Freedreno GLES/Turnip Vulkan, MSM allocation and the upstream AIDL
+DRM composer, with the matching native kernel fragment and DTB. The fresh
+Samsung panel module and GPU firmware paths are packaged for recovery as well.
+The first native build boots Android with Freedreno FD610 GLES, but physical
+scanout fails and the composer falls back to a headless 1024x768 display.
+Kernel pixel-clock and composer card-discovery fixes await a maintainer rebuild.
+Change its default to simpledrm to rebuild the verified software-rendering
+fallback described below. Use separate output directories for the two profiles.
+
+Read kernel/mainline/sm6125-mainline-6.18/Documentation/android/NATIVE_GRAPHICS.md
+for full build commands, firmware prerequisites and acceptance. Kernel and DTS manifest pins identify the matching native-profile commits.
+After a fresh sync, also apply the Mesa and DRM composer patches carried in
+the kernel repository as documented in NATIVE_GRAPHICS.md.
+The latest 2026-10-05 validation confirms the split baseline boots Android and
+physically updates the display; it does not validate native Adreno.
+
 ## First-boot profile
 
 Retain CPU, memory, power, thermal monitoring, UFS, USB/ADB, persistent logs and

@@ -23,5 +23,20 @@
     "repository": "android_external_linux-firmware-mainline",
     "target_path": "external/linux-firmware-mainline",
     "branch": "ef88d24dfc10e30826789b82fca417d6f913ee2a"
+  },
+  {
+    "repository": "android_external_mesa",
+    "target_path": "external/mesa",
+    "branch": "5a6bb76986d2d111599baf18e1dcd20b5ffd02c4"
+  },
+  {
+    "repository": "android_external_drm_hwcomposer-upstream",
+    "target_path": "external/drm_hwcomposer-upstream",
+    "branch": "8976786556df09c42b4ad41dd93969c6792f324d"
+  },
+  {
+    "repository": "android_prebuilts_mesa-build-dep",
+    "target_path": "prebuilts/mesa-build-dep",
+    "branch": "1121f16432d25f08db3844588f12e1e2eaf8f42d"
   }
 ]

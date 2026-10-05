@@ -26,10 +26,7 @@ TARGET_INITIAL_BRINGUP := true
 TARGET_AUDIO_HAL := default-aidl
 TARGET_CAMERA_PROVIDER_HAL :=
 TARGET_BLUETOOTH_HAL :=
-TARGET_GRAPHICS := swiftshader
-TARGET_GRAPHICS_ALLOCATOR_HAL := minigbm-upstream
-TARGET_GRAPHICS_COMPOSER_HAL := drmfb-composer
-TARGET_MINIGBM_PLATFORM := generic
+include $(DEVICE_PATH)/configs/graphics-profile.mk
 TARGET_HAS_VIBRATOR := false
 TARGET_SENSORS_HAL :=
 TARGET_SUPPORTS_HARDWARE_BACKED_SECURITY := false
@@ -47,15 +44,38 @@ PRODUCT_COPY_FILES += \
 TARGET_BOARD_FASTBOOT_INFO_FILE := $(DEVICE_PATH)/fastboot-info.txt
 
 # Graphics
+ifeq ($(LAUREL_GRAPHICS_PROFILE),native)
+# Use native GLES first for framework/UI rendering; Turnip is also packaged.
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.hardware.vulkan=freedreno \
+    vendor.minigbm.debug=nocompression
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    debug.hwui.renderer=skiagl \
+    debug.renderengine.backend=skiaglthreaded
+# Signed ZAP is already present in the device's extracted vendor source.
+# Reference it directly: do not import proprietary HALs or commit firmware blobs.
+LAUREL_ZAP_SOURCE := vendor/xiaomi/laurel_sprout/proprietary/vendor/firmware/a610_zap.elf
+LAUREL_SQE_SOURCE := external/linux-firmware-mainline/firmware/qcom/a630_sqe.fw
+ifeq ($(wildcard $(LAUREL_ZAP_SOURCE)),)
+$(error Missing Mi A3 signed GPU firmware: $(LAUREL_ZAP_SOURCE))
+endif
+ifeq ($(wildcard $(LAUREL_SQE_SOURCE)),)
+$(error Missing upstream SQE firmware: $(LAUREL_SQE_SOURCE))
+endif
+# Soong owns the vendor SQE destination; keep the direct copy only for recovery.
+PRODUCT_PACKAGES += linux_firmware_qcom-a630
+PRODUCT_COPY_FILES += \
+    $(LAUREL_ZAP_SOURCE):$(TARGET_COPY_OUT_VENDOR)/firmware/qcom/sm6125/xiaomi/laurel/a610_zap.mbn \
+    $(LAUREL_ZAP_SOURCE):recovery/root/vendor/firmware/qcom/sm6125/xiaomi/laurel/a610_zap.mbn \
+    $(LAUREL_SQE_SOURCE):recovery/root/vendor/firmware/qcom/a630_sqe.fw
+else
 PRODUCT_PACKAGES += libEGL_angle libGLESv1_CM_angle libGLESv2_angle
 # System ANGLE preserves SDK variants for its APK and matches EGL Loader.cpp.
 $(call soong_config_set_bool,angle,angle_in_vendor,false)
-# The upstream allocator uses the same cros_gralloc_handle ABI as minigbm.
 $(call soong_config_set_bool,drmfb_composer,uses_minigbm,true)
 PRODUCT_VENDOR_PROPERTIES += vendor.minigbm.generic_backend=dumb_generic
-# The watchdog trace shows Skia's startup cache warming compiling ANGLE
-# shaders while SurfaceFlinger and system_server wait for the first frame.
-# Skip optional precompilation while bringing up the software renderer.
+endif
+# Keep startup shader-cache warming disabled during native driver validation.
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += service.sf.prime_shader_cache=false
 
 # Heap

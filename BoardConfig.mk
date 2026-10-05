@@ -3,6 +3,7 @@
 
 DEVICE_PATH := device/xiaomi/laurel_sprout
 MAINLINE_COMMON_PATH := device/mainline/common
+include $(DEVICE_PATH)/configs/graphics-profile.mk
 include $(MAINLINE_COMMON_PATH)/BoardConfigMainlineCommon.mk
 
 # A/B
@@ -31,10 +32,25 @@ TARGET_SCREEN_DENSITY := 320
 # Graphics
 # Override the common bringup default (all), which includes x86-only i915/xe.
 # This must follow BoardConfigMainlineCommon.mk: its options overwrite product settings.
-$(call soong_config_set,minigbm_upstream,platform,generic)
+$(call soong_config_set,minigbm_upstream,platform,$(TARGET_MINIGBM_PLATFORM))
+ifeq ($(LAUREL_GRAPHICS_PROFILE),native)
+BOARD_MESA3D_GALLIUM_DRIVERS := freedreno
+BOARD_MESA3D_VULKAN_DRIVERS := freedreno
+BOARD_MESA3D_MESON_ARGS += -Dfreedreno-kmds=msm
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += $(DEVICE_PATH)/configs/compatibility_matrix.native.xml
+endif
 
 # Kernel
 include kernel/mainline/sm6125-mainline-6.18/Documentation/android/BoardConfigBringup.mk
+ifeq ($(LAUREL_GRAPHICS_PROFILE),native)
+TARGET_KERNEL_CONFIG += laurel_native_graphics.config
+TARGET_KERNEL_DTB := qcom/sm6125-xiaomi-laurel-sprout-native.dtb
+# The external panel is required before recovery opens its framebuffer.
+RECOVERY_KERNEL_MODULES := panel-samsung-s6e8fco.ko
+BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD := panel-samsung-s6e8fco.ko
+BOARD_RECOVERY_KERNEL_MODULES_LOAD := panel-samsung-s6e8fco.ko
+BOARD_VENDOR_KERNEL_MODULES_LOAD := panel-samsung-s6e8fco.ko
+endif
 # Merge after the kernel fragments to support the selected boot-control UAPI.
 TARGET_KERNEL_CONFIG_EXT := $(DEVICE_PATH)/configs/ufs-bsg.config \
     $(DEVICE_PATH)/configs/android-boot.config
@@ -63,7 +79,7 @@ TARGET_KERNEL_LLVM_BINUTILS := true
 
 # Kernel modules
 # Lineage installs every newly built module and its depmod metadata in vendor.
-# Empty load lists keep optional hardware out of the first boot.
+# Native graphics loads its panel early; the fallback needs no panel module.
 TARGET_AUTO_COLLECT_KERNEL_MODULE_DEPS := true
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD :=
 

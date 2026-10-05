@@ -4,4 +4,10 @@
 <manifest>
   <remove-project name="LineageOS/android_device_xiaomi_laurel_sprout" optional="true" />
   <project name="vishwajithkv/android_device_xiaomi_laurel_sprout" path="device/xiaomi/laurel_sprout" remote="github" revision="lineage-23.2-6.18-split" />
+  <remove-project name="LineageOS/android_external_mesa" optional="true" />
+  <project name="LineageOS/android_external_mesa" path="external/mesa" remote="github" revision="5a6bb76986d2d111599baf18e1dcd20b5ffd02c4" />
+  <remove-project name="LineageOS/android_external_drm_hwcomposer-upstream" optional="true" />
+  <project name="LineageOS/android_external_drm_hwcomposer-upstream" path="external/drm_hwcomposer-upstream" remote="github" revision="8976786556df09c42b4ad41dd93969c6792f324d" />
+  <remove-project name="LineageOS/android_prebuilts_mesa-build-dep" optional="true" />
+  <project name="LineageOS/android_prebuilts_mesa-build-dep" path="prebuilts/mesa-build-dep" remote="github" revision="1121f16432d25f08db3844588f12e1e2eaf8f42d" />
 </manifest>
