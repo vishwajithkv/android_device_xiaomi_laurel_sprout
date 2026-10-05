@@ -2,11 +2,11 @@
 # Xiaomi Mi A3: LineageOS 23.2 with Google ACK 6.18
 
 Device: laurel_sprout; Qualcomm SM6125 / Snapdragon 665 / Trinket.
-This branch is `lineage-23.2-6.18`, using Android 16 userspace.
+This branch is `lineage-23.2-6.18-split`, using Android 16 userspace.
 
 ## Source and status
 
-Kernel source: `kernel/mainline/sm6125-mainline-6.18`, branch `mainline-6.18`,
+Kernel source: `kernel/mainline/sm6125-mainline-6.18`, branch `mainline-6.18-split`,
 based on Google kernel/common `android17-6.18-2026-09_r5`
 (`926a323dc2667901ddcf1d5b024b82eb00aa89cc`, Linux 6.18.32).
 Google history is retained; the Mi A3 community patches preserve their authors.
@@ -27,6 +27,17 @@ logger exited early; diagnostics were saved directly through ADB. Native GPU,
 touch and encryption remain outside this verified boot milestone.
 Google's Android 17 kernel is being used as a custom board kernel on Android 16,
 not as a certified GKI image.
+
+## Split source repositories
+
+The kernel core, devicetrees and external modules are separate sibling Git
+repositories under kernel/mainline/: sm6125-mainline-6.18,
+sm6125-mainline-6.18-devicetrees and sm6125-mainline-6.18-modules.
+The device manifest pins all three. Publish the new source repositories and
+split branches before fresh network sync; they are initially local.
+See kernel Documentation/android/SPLIT_SOURCES.md for the verified Lineage
+reference, ownership, build integration and fallback. The pre-split 6.18
+boot result above does not validate the refactor. No hardware was enabled.
 
 ## First-boot profile
 
@@ -88,6 +99,11 @@ and check `sys.boot_completed=1` and Settings through scrcpy. Existing userdata
 must not be formatted automatically to conceal a boot failure.
 
 ## Fallback
+
+For the verified unsplit 6.18 source, switch the kernel back to mainline-6.18
+and this device tree to lineage-23.2-6.18, restoring its local manifests.
+Keep the matching baseline images and output directory.
+
 
 The old kernel checkout `kernel/mainline/sm6125-mainline` remains unchanged.
 Switch this ROM device repository back to `lineage-23.2-6.15` to select it again,

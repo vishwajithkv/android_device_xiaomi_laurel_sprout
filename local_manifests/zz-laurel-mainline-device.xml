@@ -3,5 +3,5 @@
 <!-- Load after roomservice.xml so its downstream device selection is replaced. -->
 <manifest>
   <remove-project name="LineageOS/android_device_xiaomi_laurel_sprout" optional="true" />
-  <project name="vishwajithkv/android_device_xiaomi_laurel_sprout" path="device/xiaomi/laurel_sprout" remote="github" revision="lineage-23.2-6.18" />
+  <project name="vishwajithkv/android_device_xiaomi_laurel_sprout" path="device/xiaomi/laurel_sprout" remote="github" revision="lineage-23.2-6.18-split" />
 </manifest>

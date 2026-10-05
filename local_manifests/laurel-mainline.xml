@@ -7,5 +7,7 @@
   <project name="LineageOS/android_external_minigbm-upstream" path="external/minigbm-upstream" remote="github" revision="51b97430ef97474b386bc958d67e5171a86d0d76" />
   <project name="LineageOS/android_external_linux-firmware-mainline" path="external/linux-firmware-mainline" remote="github" revision="ef88d24dfc10e30826789b82fca417d6f913ee2a" />
   <project name="vishwajithkv/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline" remote="github" revision="63e1f779b9c4c60409b5ac074e5f1ad9050d43af" />
-  <project name="vishwajithkv/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline-6.18" remote="github" revision="5b501da414fdc6bc2ef8e37f7178396ae67b490e" />
+  <project name="vishwajithkv/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline-6.18" remote="github" revision="0bb0860cf3f64c974f88aedd16aa32a42ca05fce" />
+  <project name="vishwajithkv/laurel_sprout_mainline-devicetrees" path="kernel/mainline/sm6125-mainline-6.18-devicetrees" remote="github" revision="99ae772f571ce1bd034ab1e43b69cf04880cc0ee" />
+  <project name="vishwajithkv/laurel_sprout_mainline-modules" path="kernel/mainline/sm6125-mainline-6.18-modules" remote="github" revision="539351b495b6b53655965eb44ba59a08a3e07275" />
 </manifest>
