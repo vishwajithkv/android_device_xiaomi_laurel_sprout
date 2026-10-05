@@ -1,9 +1,9 @@
 #!/vendor/bin/sh
 # SPDX-License-Identifier: Apache-2.0
 
-# simpleDRM shares the bootloader framebuffer with fbcon. Stop the kernel
-# console from drawing over Android before the graphics services start.
-# This helper runs only from normal Android init; recovery keeps its console.
+# The current kernel disables fbcon, retaining DRM/fbdev for Android/recovery.
+# Also detach fbcon when using an older matching bringup kernel: its console
+# shares the bootloader framebuffer with simpleDRM. This is normal boot only.
 for vtconsole in /sys/class/vtconsole/vtcon*; do
     [ -r "$vtconsole/name" ] || continue
     case "$(cat "$vtconsole/name")" in

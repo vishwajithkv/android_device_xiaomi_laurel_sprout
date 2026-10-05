@@ -6,6 +6,11 @@ import /vendor/etc/init/hw/init.mainline.rc
 on early-init
     setprop sys.use_memfd true
 
+on init
+    # Keep Qualcomm bootctrl's partition paths valid on the mainline layout.
+    mkdir /dev/block/bootdevice 0755 root root
+    symlink /dev/block/by-name /dev/block/bootdevice/by-name
+
 on post-fs
     start laurel_boot_logger
     exec -- /vendor/bin/init.laurel_sprout.mainline

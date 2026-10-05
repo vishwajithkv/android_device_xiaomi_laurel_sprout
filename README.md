@@ -43,11 +43,15 @@ boot result above does not validate the refactor. No hardware was enabled.
 ## First-boot profile
 
 Retain CPU, memory, power, thermal monitoring, UFS, USB/ADB, persistent logs and
-SimpleDRM. Native display/GPU, touch and other optional hardware remain disabled;
-their existing source support is retained for later stages. Rendering uses the
+SimpleDRM. FT3518 touch and its I2C/GPI/power dependencies are enabled for the
+next build, pending device validation. Native display/GPU and other optional
+hardware remain disabled; their source support is retained for later stages. Rendering uses the
 existing SwiftShader/ANGLE, generic minigbm and DRM framebuffer composer setup.
-The normal-boot init helper detaches the framebuffer console before Android
-starts graphics services; recovery retains its console.
+The kernel text framebuffer console is disabled to prevent penguins and kernel
+text competing with Android. SimpleDRM and fbdev remain available for recovery
+graphics. Early screen logs disappear; ADB and persistent kernel logs remain.
+The normal-boot helper retains a console-detach fallback for older kernels.
+See kernel Documentation/android/TOUCH_DISPLAY.md for validation and limitations.
 
 Keep existing fstab, explicit `avb=vbmeta`, cgroup fixes, DMA-heap permissions,
 shader-cache workaround, software security HALs and unencrypted userdata.
@@ -110,3 +114,30 @@ The old kernel checkout `kernel/mainline/sm6125-mainline` remains unchanged.
 Switch this ROM device repository back to `lineage-23.2-6.15` to select it again,
 and use the original ROM output directory. Keep the matching previously built
 images for device recovery. The manifests pin the published 6.18 kernel commits and select this ROM branch.
+
+## Physical display corrections
+
+The updated composer imports minigbm image planes without treating its metadata
+FD as another plane and paces unsupported vblank waits in software. Its patch
+is saved in the kernel repository at Documentation/android/rom-patches/
+hardware-mainline-common/0001-drmfb-import-image-planes-and-pace-simpledrm.patch
+for fresh checkouts.
+
+The next live diagnosis verified that composer was installed, then identified
+the actual framebuffer rejection: SimpleDRM does not expose Android's XBGR8888
+client-target format. The kernel now advertises it for native XRGB8888 scanout
+and converts red/blue channels during the shadow blit. The native bootloader
+format is actually ARGB8888 (a8r8g8b8); the follow-up kernel correction now
+covers this alpha-bearing variant too, setting opaque alpha when converting. This needs a new kernel/
+boot build, retaining the updated composer. Physical GUI operation after this
+correction still requires validation; see kernel Documentation/android/
+TOUCH_DISPLAY.md for captured evidence and the correction to the earlier diagnosis.
+
+## Latest validation (2026-10-05)
+
+The split-source build boots Android with both CPU frequency policies active.
+The maintainer confirms recovery touch, completed ROM sideload and physical
+display transition after the ARGB8888 correction. Rendering remains software
+based and installation timing has not been quantified. Earlier pending status
+paragraphs describe the history, not the latest result. Apply the composer
+patch above as well as the system/core patch when recreating this build.

@@ -8,3 +8,12 @@ on init
 
 on fs
     mount configfs none /config nodev noexec nosuid
+    # Qualcomm bootctrl/GPT utilities use the legacy partition directory.
+    # Mainline ueventd supplies the same partitions under /dev/block/by-name.
+    mkdir /dev/block/bootdevice 0755 root root
+    symlink /dev/block/by-name /dev/block/bootdevice/by-name
+
+on boot
+    # QTI's recovery HAL is in early_hal; recovery starts only default and hal.
+    # Bring it up before update_engine_sideload waits for IBootControl.
+    start vendor.boot-qti
