@@ -45,11 +45,14 @@ include kernel/mainline/sm6125-mainline-6.18/Documentation/android/BoardConfigBr
 ifeq ($(LAUREL_GRAPHICS_PROFILE),native)
 TARGET_KERNEL_CONFIG += laurel_native_graphics.config
 TARGET_KERNEL_DTB := qcom/sm6125-xiaomi-laurel-sprout-native.dtb
-# The external panel is required before recovery opens its framebuffer.
+# Normal native boot needs the panel; SimpleDRM recovery does not bind it.
 RECOVERY_KERNEL_MODULES := panel-samsung-s6e8fco.ko
 BOARD_RECOVERY_RAMDISK_KERNEL_MODULES_LOAD := panel-samsung-s6e8fco.ko
 BOARD_RECOVERY_KERNEL_MODULES_LOAD := panel-samsung-s6e8fco.ko
 BOARD_VENDOR_KERNEL_MODULES_LOAD := panel-samsung-s6e8fco.ko
+# One boot image serves Android and recovery. Kernel early boot selects the
+# validated SimpleDRM fallback only when skip_initramfs is absent (recovery).
+BOARD_KERNEL_CMDLINE += msm.laurel_recovery_simpledrm=1
 endif
 # Merge after the kernel fragments to support the selected boot-control UAPI.
 TARGET_KERNEL_CONFIG_EXT := $(DEVICE_PATH)/configs/ufs-bsg.config \

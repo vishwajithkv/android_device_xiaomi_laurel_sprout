@@ -6,6 +6,20 @@ This branch is `lineage-23.2-6.18-split`, using Android 16 userspace.
 
 ## Source and status
 
+The native profile now requests recovery-only SimpleDRM through
+msm.laurel_recovery_simpledrm=1. The built-in MSM kernel early-init hook checks
+the Mi A3 compatible and the exact skip_initramfs normal-boot token. Recovery
+disables GPU/GMU/GPUCC/GPU-SMMU and MDSS/DSI/PHY/DISPCC live DT nodes before
+platform population, preserving the bootloader framebuffer. Android retains
+the native nodes and uses Freedreno/Turnip. A single recovery-as-boot image
+still serves both modes; changing only a ramdisk property would be too late.
+The panel module stays packaged for normal native boot but has no host to
+bind in fallback recovery. The maintainer reports that the rebuilt fallback
+restores the recovery display. Android's delayed display transition remains;
+this recovery policy does not fix that separate native-panel startup issue.
+Touch, sideload and repeated reboot checks for this revision remain to be
+confirmed with device logs.
+
 Kernel source: `kernel/mainline/sm6125-mainline-6.18`, branch `mainline-6.18-split`,
 based on Google kernel/common `android17-6.18-2026-09_r5`
 (`926a323dc2667901ddcf1d5b024b82eb00aa89cc`, Linux 6.18.32).
