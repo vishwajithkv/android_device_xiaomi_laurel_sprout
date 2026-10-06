@@ -46,9 +46,10 @@ configs/graphics-profile.mk now selects native graphics for the next full ROM
 build: Mesa Freedreno GLES/Turnip Vulkan, MSM allocation and the upstream AIDL
 DRM composer, with the matching native kernel fragment and DTB. The fresh
 Samsung panel module and GPU firmware paths are packaged for recovery as well.
-The first native build boots Android with Freedreno FD610 GLES, but physical
-scanout fails and the composer falls back to a headless 1024x768 display.
-Kernel pixel-clock and composer card-discovery fixes await a maintainer rebuild.
+The maintainer's 2026-10-06 build #15 has physical native scanout at
+720 x 1560 / 60 Hz and Freedreno FD610 GLES. Settings scrolling confirms
+DEVICE composition for the app and status bar without new display commit
+failures. Turnip execution and GPU power/performance remain unverified.
 Change its default to simpledrm to rebuild the verified software-rendering
 fallback described below. Use separate output directories for the two profiles.
 
@@ -169,3 +170,15 @@ startup; Android radio remains disabled until matching firmware, mainline RMTFS
 and a compatible radio HAL/data path are integrated. See kernel
 Documentation/android/MODEM.md. The validated pre-modem pins are kernel
 ff4152ad6d0f, devicetrees da7d0af and device 11e169e.
+
+## Native display validation (2026-10-06)
+
+The latest kernel/DTS pins include attributed upstream MDSS reset backports,
+SM6125 lane-clamp wiring, panel-before-video sequencing and the prepared-PLL
+restart fix used in the working build #15. The maintainer confirmed physical
+output and smooth Android rendering. Live captures confirm hardware composition;
+launcher mixed CLIENT/DEVICE composition is not evidence of a broken composer.
+The required Mesa, DRM composer, hardware/mainline/common and system/core local
+changes are preserved as exact patches in the kernel's rom-patches directory.
+Apply those patches once after syncing, as documented in NATIVE_GRAPHICS.md.
+Keep the matching kernel, DTB and freshly built modules together.
