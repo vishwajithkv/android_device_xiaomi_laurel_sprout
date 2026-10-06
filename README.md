@@ -182,3 +182,14 @@ The required Mesa, DRM composer, hardware/mainline/common and system/core local
 changes are preserved as exact patches in the kernel's rom-patches directory.
 Apply those patches once after syncing, as documented in NATIVE_GRAPHICS.md.
 Keep the matching kernel, DTB and freshly built modules together.
+
+## Organized source layout
+
+The devicetrees repository owns qcom/ DTS sources, bindings/ carried schemas
+and include/dt-bindings/ board headers. The kernel retains compatibility
+symlinks to these files plus the upstream shared bindings. The external panel
+module lives under qcom/opensource/display-drivers/panel/ in the modules repo.
+Lineage source dependencies and the standalone kernel helper use the new paths.
+All three repositories must be synced to the matching pinned revisions.
+This source-only refactor needs a maintainer rebuild; the working pre-refactor
+native-display build remains the validation baseline.
