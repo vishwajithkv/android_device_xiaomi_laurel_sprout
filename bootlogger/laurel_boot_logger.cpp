@@ -324,8 +324,10 @@ void CaptureKernelLog(const std::string& directory, CaptureStatus* status) {
             if (!writer_failed) status->writer_phase = 0;
         }
         if (fd >= 0) {
-            status->writer_phase = 3;
-            if (fdatasync(fd) < 0) fail(errno);
+            if (!writer_failed) {
+                status->writer_phase = 3;
+                if (fdatasync(fd) < 0) fail(errno);
+            }
             close(fd);
         }
         if (!writer_failed) status->writer_phase = 4;
@@ -392,7 +394,7 @@ void WriteStatus(const std::string& path, const CaptureStatus* s, int kernel_exi
         << "reader_phase=" << s->reader_phase.load() << " writer_phase=" << s->writer_phase.load() << "\n"
         << "phase_key=0:idle,1:open,2:io,3:flush,4:finished,5:error\n"
         << "snapshot_phase=" << s->snapshot_phase.load() << "\n"
-        << "snapshot_key=1:space,2:status,3:logcat_flush,4:state_read,5:state_flush,6:rename\n"
+        << "snapshot_key=1:space,2:status,3:logcat_flush,4:state_read,5:state_flush,6:rename,7:boot_info\n"
         << "last_read_ms=" << s->read_ms.load() << " last_write_ms=" << s->write_ms.load() << "\n"
         << "read_bytes=" << s->read_bytes.load() << " written_bytes=" << s->written_bytes.load() << "\n"
         << "dropped_records=" << s->dropped_records.load() << " sequence_gaps=" << s->sequence_gaps.load()
@@ -463,14 +465,17 @@ int main() {
                     if (logcat > 0) kill(logcat, SIGTERM);
                     _exit(2);
                 }
+                status->snapshot_phase = 2;
+                WriteStatus(directory + "/collector-status.txt", status, kernel_exit, logcat_exit);
+                const int status_fd = open((directory + "/collector-status.txt").c_str(), O_WRONLY | O_CLOEXEC);
+                if (status_fd >= 0) { fdatasync(status_fd); close(status_fd); }
+                status->snapshot_phase = 7;
                 if (current == 0) {
                     const std::string info = directory + "/boot-info.txt";
                     AppendFile(info, "cmdline", "/proc/cmdline");
                     AppendFile(info, "kernel", "/proc/version");
                     AppendFile(info, "build identity", "/vendor/build.prop");
                 }
-                status->snapshot_phase = 2;
-                WriteStatus(directory + "/collector-status.txt", status, kernel_exit, logcat_exit);
                 // Logcat is independent; flush only its current file, not all metadata.
                 status->snapshot_phase = 3;
                 const int log_fd = open((directory + "/logcat.txt").c_str(), O_WRONLY | O_CLOEXEC);
@@ -487,10 +492,13 @@ int main() {
                     fdatasync(state_fd);
                     close(state_fd);
                 }
-                const int status_fd = open((directory + "/collector-status.txt").c_str(), O_WRONLY | O_CLOEXEC);
-                if (status_fd >= 0) { fdatasync(status_fd); close(status_fd); }
                 status->snapshot_phase = 6;
-                rename(tmp.c_str(), (directory + (current == 0 ? "/initial-state.log" : "/state.log")).c_str());
+                if (rename(tmp.c_str(), (directory + (current == 0 ? "/initial-state.log" : "/state.log")).c_str()) < 0) {
+                    fprintf(stderr, "laurel_boot_logger: snapshot rename failed: %s\n", strerror(errno));
+                    _exit(1);
+                }
+                const int dir_fd = open(directory.c_str(), O_RDONLY | O_DIRECTORY | O_CLOEXEC);
+                if (dir_fd >= 0) { fsync(dir_fd); close(dir_fd); }
                 _exit(0);
             }
         }

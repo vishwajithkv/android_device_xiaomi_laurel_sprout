@@ -36,7 +36,7 @@ static bool WaitForTqftp() {
     request.cmd = htole32(QRTR_TYPE_NEW_LOOKUP);
     request.server.service = htole32(4096);
     if (sendto(fd.get(), &request, sizeof(request), 0,
-               reinterpret_cast<sockaddr*>(&address), sizeof(address)) != sizeof(request)) {
+               reinterpret_cast<sockaddr*>(&address), sizeof(address)) != static_cast<ssize_t>(sizeof(request))) {
         PLOG(ERROR) << "QRTR lookup";
         return false;
     }
@@ -52,7 +52,7 @@ static bool WaitForTqftp() {
         qrtr_ctrl_pkt packet{};
         const ssize_t count = recv(fd.get(), &packet, sizeof(packet), MSG_DONTWAIT);
         if (count < 0 && (errno == EINTR || errno == EAGAIN)) continue;
-        if (count != sizeof(packet)) continue;
+        if (count != static_cast<ssize_t>(sizeof(packet))) continue;
         if (le32toh(packet.cmd) == QRTR_TYPE_NEW_SERVER &&
             le32toh(packet.server.service) == 4096 &&
             (le32toh(packet.server.instance) & 0xff) == 1 &&
