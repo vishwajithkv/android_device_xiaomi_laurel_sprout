@@ -99,6 +99,13 @@ int main(int, char** argv) {
             LOG(ERROR) << "Cannot load ath10k SNOC with diagnostic parameters";
             return 1;
         }
+        // cfg80211/nl80211 only become available after the modules load.
+        // Wificond may have started earlier and cached failed family discovery.
+        if (stage == "full" &&
+            !android::base::SetProperty("vendor.laurel.wifi.netlink_ready", "1")) {
+            LOG(ERROR) << "Cannot publish nl80211 readiness";
+            return 1;
+        }
     }
     if (!android::base::SetProperty("ctl.start", "vendor.laurel-tqftpserv") || !WaitForTqftp()) return 1;
     // RMTFS publishes service 14 before its existing -s path boots MPSS.

@@ -1,6 +1,18 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # Xiaomi Mi A3: LineageOS 23.2 with Google ACK 6.18
 
+Wi-Fi validation (2026-10-09): correcting the WLAN DT resource removes the
+CE MMIO stall. Live ADB confirms wlan0 registration and, after refreshing
+wificond's initial failed nl80211 discovery, a WPA3-SAE connection on 5 GHz,
+IPv4 assignment and transmitted packets. The helper now publishes nl80211
+readiness after loading the full-mode kernel modules; init restarts wificond
+at that point. Rebuild the complete ROM and verify connection after reboot.
+Select `export LAUREL_WIFI_STAGE=full`; the QMI-only diagnostic default does
+not expose usable Wi-Fi. The wificond split-dump source patch is carried in
+the kernel's Documentation/android/rom-patches/wificond/ directory and is
+already applied in this workspace. Preserve it for a fresh sync. 2.4 GHz
+association remains unverified. The paragraphs below retain earlier results.
+
 Wi-Fi candidate (2026-10-08): the maintainer's build #23 boots Android and
 reaches FW_READY in QMI-only mode. Full mode reproduced the CE-register hang
 and CPU 7 RCU stalls; the maintainer subsequently reported loss of display

@@ -22,6 +22,11 @@ on property:sys.boot_completed=1 && property:ro.vendor.laurel.wifi.deferred=true
 on post-fs-data && property:ro.vendor.laurel.wifi.deferred=false
     start vendor.laurel-wifi-start
 
+# Deferred cfg80211 loading registers nl80211 after class main has started.
+# Recreate wificond's sockets and family/features discovery once it exists.
+on property:vendor.laurel.wifi.netlink_ready=1
+    restart wificond
+
 # Userdebug bringup launcher shares the existing root diagnostics policy.
 # It waits for actual QRTR publication, not init service process existence.
 service vendor.laurel-wifi-start /vendor/bin/laurel_wifi_start
