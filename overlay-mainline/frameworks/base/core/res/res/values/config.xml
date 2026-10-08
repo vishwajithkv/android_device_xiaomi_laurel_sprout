@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- Copyright (C) 2009 The Android Open Source Project -->
+<!-- Mi A3 cutout geometry carried from the existing LineageOS device overlay. -->
+<resources>
+    <!-- There are no physical home/back/recents keys on Mi A3. -->
+    <bool name="config_showNavigationBar">true</bool>
+
+    <string translatable="false" name="config_mainBuiltInDisplayCutout">
+        M -89.6 0
+        C -65.1 0 -51.2 0.2 -37 31.3
+        C -29.3 44.1 -15.5 53 0 53
+        C 15.5 53 29.3 44.1 37 31.3
+        C 51.2 0.2 65.1 0 89.6 0
+        L -89.6 0
+        Z
+    </string>
+    <bool name="config_fillMainBuiltInDisplayCutout">true</bool>
+</resources>

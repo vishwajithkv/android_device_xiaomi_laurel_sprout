@@ -34,6 +34,10 @@ TARGET_SUPPORTS_SUSPEND := false
 include device/mainline/common/optional/options.mk
 $(call inherit-product, device/mainline/common/mainline_common.mk)
 
+# Phone geometry and software navigation. Keep downstream HAL capability
+# overlays separate from the mainline hardware that is currently available.
+DEVICE_PACKAGE_OVERLAYS += $(DEVICE_PATH)/overlay-mainline
+
 # Cgroups
 # API 28 adds downstream schedtune defaults; vendor overrides load last.
 PRODUCT_COPY_FILES += \

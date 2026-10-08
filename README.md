@@ -1,20 +1,65 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # Xiaomi Mi A3: LineageOS 23.2 with Google ACK 6.18
 
-Wi-Fi candidate (2026-10-08): the default now finishes Android boot before
-loading ath10k with qmi_only=1. It checks the WCN3990 PMU/firmware sequence
-at FW_READY and intentionally exposes no Wi-Fi interface. The boot logger
-now separates kernel reading, writing and state snapshots and records errors.
-Rebuild the complete ROM to install this candidate. See the companion kernel's
+Wi-Fi candidate (2026-10-08): the maintainer's build #23 boots Android and
+reaches FW_READY in QMI-only mode. Full mode reproduced the CE-register hang
+and CPU 7 RCU stalls; the maintainer subsequently reported loss of display
+updates. The default is restored to qmi-only after Android boot completion to
+avoid that access. Wi-Fi connectivity remains unavailable in this profile.
+The boot logger separates kernel reading, writing and state snapshots and records
+errors. Rebuild the complete ROM to install this candidate. See the companion kernel's
 Documentation/android/WIFI_IMPLEMENTATION_20261008.md for stage selection,
-source provenance and the maintainer validation sequence. No new build or
-device result is claimed.
-
+source provenance and the maintainer validation sequence. See
+[the reviewer entry point](../../../kernel/mainline/sm6125-mainline-6.18/Documentation/android/WIFI_REVIEW.md)
+for exact integration patches and current failure evidence.
 
 Device: laurel_sprout; Qualcomm SM6125 / Snapdragon 665 / Trinket.
 This branch is `lineage-23.2-6.18-split`, using Android 16 userspace.
 
 ## Source and status
+
+BPF-cache validation (2026-10-07): the connected Android boot with the rebuilt
+Tethering APEX loads BPF successfully in an init wait of 1.369 s, down from
+13.806 s; netd.o loads in 106 ms. Composer starts at 11.003 s and native
+frame-synchronized brightness succeeds at 12.688 s. The maintainer reports
+recovery display and startup improvement. The experimental bootloader-logo retention has been reverted after the
+maintainer reported improper behavior. Earlier native/recovery display and
+BPF startup corrections remain; a splash-to-Android gap can still occur.
+See kernel Documentation/android/DISPLAY_STARTUP.md for evidence and checks.
+
+BPF startup candidate (2026-10-07): build #19 still blocks init for 13.806 s.
+The local Connectivity loader now reads each APEX BPF ELF once into memory,
+avoiding repeated file reads during symbol/BTF fixups. New logs separate BTF
+fixups from kernel BTF loading; performance improvement awaits validation.
+Preserve the companion kernel's
+Documentation/android/rom-patches/connectivity/0001-netbpfload-cache-elf-startup.patch
+when recreating this workspace; it is already applied locally. Rebuild the
+full ROM, including the Tethering APEX, to install it. A boot-only update
+cannot apply this userspace correction. See DISPLAY_STARTUP.md for timings.
+
+Display startup investigation (2026-10-07): native DRM binds at 1.254 s,
+but the initial brightness transfer fails. Android's BPF loader also blocks
+init for 13.245 s before composer startup. Recovery's missing-battery retry
+holds its drawing mutex for up to five seconds. A local bootable/recovery
+correction moves the retry outside that lock; preserve/reapply the patch at
+kernel/mainline/sm6125-mainline-6.18/Documentation/android/recovery-battery-ui-lock.patch
+when recreating the sources. This change needs a maintainer rebuild and
+validation. See DISPLAY_STARTUP.md in the same directory for evidence and
+the comparison with Laurel's 4.14 continuous-splash/first-frame handling.
+
+Phone UI overlay correction (2026-10-07): the running ROM resolved
+config_showNavigationBar=false, an empty cutout, a 28dp status bar and zero
+rounded-corner content padding. The original device overlay folders were
+not registered in device.mk. Although the gestural navigation package was
+enabled, Settings requires WindowManager to report a navigation bar before
+exposing navigation-mode controls. device.mk now includes overlay-mainline,
+which enables software navigation and carries the existing Mi A3 notch,
+status-bar and rounded-corner geometry. It leaves navigation-mode selection
+to the standard Android overlays and user settings. Downstream fingerprint,
+sensor, light and power capability overlays are not included by this change.
+Rebuild the ROM to apply framework/SystemUI resource changes; this source
+correction has not been built or validated on the device. Confirm padding,
+navigation-mode Settings and edge-back gestures after installation.
 
 The native profile now requests recovery-only SimpleDRM through
 msm.laurel_recovery_simpledrm=1. The built-in MSM kernel early-init hook checks
@@ -217,3 +262,25 @@ Lineage source dependencies and the standalone kernel helper use the new paths.
 All three repositories must be synced to the matching pinned revisions.
 This source-only refactor needs a maintainer rebuild; the working pre-refactor
 native-display build remains the validation baseline.
+
+## Wi-Fi candidate
+
+WCN3990 board wiring belongs to the devicetrees repo; upstream ath10k and
+its vendor modules belong to the ACK kernel, not a duplicate external driver.
+Android firmware links and services belong to the ROM tree. See the companion
+kernel `Documentation/android/WIFI.md` for provenance, integration and pending
+2.4/5 GHz validation. Build #23 reaches FW_READY in QMI-only mode; full mode still hangs at CE
+initialization. Association on either band is unvalidated.
+
+## Complete display rollback, 2026-10-08
+
+Following the report of a stuck Lineage boot logo, all remaining uncommitted
+display experiments have now been restored to the committed baseline:
+DPU teardown/MMU reordering, exported DSI frame wait and panel brightness
+retry changes are removed, in addition to splash retention. The panel again
+uses the committed deferred 20 ms brightness worker. Earlier historical
+candidate descriptions above no longer describe the current source.
+Wi-Fi, recovery UI and Connectivity BPF changes remain independent.
+Archived display diffs are in out/display-revert-20261008 locally. Matching
+kernel and panel modules must be rebuilt together; no runtime fix is claimed
+until the maintainer validates.
