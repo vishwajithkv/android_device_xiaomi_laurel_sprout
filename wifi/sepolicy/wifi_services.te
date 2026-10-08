@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: Apache-2.0
+# Factory storage is read-only; rmtfs -r handles modem writes in a RAM shadow.
+type laurel_rmtfs, domain;
+type laurel_rmtfs_exec, exec_type, vendor_file_type, file_type;
+init_daemon_domain(laurel_rmtfs)
+allow laurel_rmtfs kmsg_debug_device:chr_file rw_file_perms;
+allow laurel_rmtfs block_device:dir search;
+allow laurel_rmtfs block_device:lnk_file r_file_perms;
+allow laurel_rmtfs sd_device:blk_file { getattr open read };
+type laurel_rmtfs_device, dev_type;
+type laurel_sysfs_remoteproc, fs_type, sysfs_type;
+type laurel_sysfs_rmtfs, fs_type, sysfs_type;
+allow laurel_rmtfs laurel_rmtfs_device:chr_file { getattr open read write };
+allow laurel_rmtfs self:capability net_admin;
+allow laurel_rmtfs self:qipcrtr_socket { bind create getattr read setopt write };
+allow laurel_rmtfs sysfs:dir r_dir_perms;
+allow laurel_rmtfs sysfs:lnk_file r_file_perms;
+allow laurel_rmtfs laurel_sysfs_remoteproc:dir r_dir_perms;
+allow laurel_rmtfs laurel_sysfs_remoteproc:file rw_file_perms;
+allow laurel_rmtfs laurel_sysfs_rmtfs:dir r_dir_perms;
+allow laurel_rmtfs laurel_sysfs_rmtfs:file r_file_perms;
+
+type laurel_tqftpserv, domain;
+type laurel_tqftpserv_exec, exec_type, vendor_file_type, file_type;
+type laurel_tqftpserv_data_file, file_type, data_file_type;
+init_daemon_domain(laurel_tqftpserv)
+allow laurel_tqftpserv kmsg_debug_device:chr_file rw_file_perms;
+allow laurel_tqftpserv self:qipcrtr_socket { bind connect create getattr read setopt write };
+allow laurel_tqftpserv sysfs:dir r_dir_perms;
+allow laurel_tqftpserv sysfs:file r_file_perms;
+allow laurel_tqftpserv sysfs:lnk_file r_file_perms;
+allow laurel_tqftpserv laurel_sysfs_remoteproc:dir r_dir_perms;
+allow laurel_tqftpserv laurel_sysfs_remoteproc:file r_file_perms;
+allow laurel_tqftpserv vendor_firmware_file:dir r_dir_perms;
+allow laurel_tqftpserv vendor_firmware_file:file r_file_perms;
+allow laurel_tqftpserv vendor_firmware_file:lnk_file r_file_perms;
+allow laurel_tqftpserv laurel_tqftpserv_data_file:dir create_dir_perms;
+allow laurel_tqftpserv laurel_tqftpserv_data_file:file create_file_perms;

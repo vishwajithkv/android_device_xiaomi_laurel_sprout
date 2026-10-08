@@ -107,3 +107,6 @@ PRODUCT_SOONG_NAMESPACES += \
     external/minigbm-upstream \
     hardware/qcom-caf/bootctrl \
     kernel/mainline/configs
+
+# WCN3990 STA connectivity (upstream ath10k SNOC).
+include $(DEVICE_PATH)/wifi/product.mk

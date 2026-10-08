@@ -54,6 +54,11 @@ BOARD_VENDOR_KERNEL_MODULES_LOAD := panel-samsung-s6e8fco.ko
 # validated SimpleDRM fallback only when skip_initramfs is absent (recovery).
 BOARD_KERNEL_CMDLINE += msm.laurel_recovery_simpledrm=1
 endif
+# ACK WLAN module; depmod resolves cfg80211/mac80211/ath dependencies.
+TARGET_KERNEL_CONFIG += laurel_wifi.config
+# ath10k_snoc is packaged but loaded explicitly by laurel_wifi_start.
+# Keeping it out of modules.load permits QMI-only/module-parameter isolation.
+
 # Merge after the kernel fragments to support the selected boot-control UAPI.
 TARGET_KERNEL_CONFIG_EXT := $(DEVICE_PATH)/configs/ufs-bsg.config \
     $(DEVICE_PATH)/configs/android-boot.config
@@ -117,3 +122,6 @@ DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/configs/manifest.xml
 # Verified Boot
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+
+# Device-scoped firmware service domains.
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/wifi/sepolicy

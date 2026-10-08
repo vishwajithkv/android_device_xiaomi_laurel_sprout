@@ -1,0 +1,446 @@
+// SPDX-License-Identifier: Apache-2.0
+// Firmware stays on the existing read-only, slot-selected modem partition.
+
+install_symlink {
+    name: "laurel_wlan_fw_link_0",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b00",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b00",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_1",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b01",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b01",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_2",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b02",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b02",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_3",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b03",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b03",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_4",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b04",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b04",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_5",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b05",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b05",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_6",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b06",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b06",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_7",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b07",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b07",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_8",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b08",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b08",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_9",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b09",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b09",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_10",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b10",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b10",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_11",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b11",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b11",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_12",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b12",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b12",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_13",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b14",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b14",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_14",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b15",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b15",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_15",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b16",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b16",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_16",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b17",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b17",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_17",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b18",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b18",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_18",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b20",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b20",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_19",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b21",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b21",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_20",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b22",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b22",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_21",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b23",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b23",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_22",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b24",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b24",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_23",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b25",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b25",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_24",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b26",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b26",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_25",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b27",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b27",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_26",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b28",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b28",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_27",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.b29",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.b29",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_28",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/modem.mdt",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/modem.mdt",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_29",
+    vendor: true,
+    installed_location: "firmware/qcom/sm6125/xiaomi/laurel/wlanmdsp.mbn",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/wlanmdsp.mbn",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_30",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/board.bin",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.bin",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_31",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.102",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.102",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_32",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.104",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.104",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_33",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.105",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.105",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_34",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.106",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.106",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_35",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.107",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.107",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_36",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.108",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.108",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_37",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.109",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.109",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_38",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.10e",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.10e",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_39",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.10f",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.10f",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_40",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.202",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.202",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_41",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.203",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.203",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_42",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b04",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b04",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_43",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b07",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b07",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_44",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b09",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b09",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_45",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b0a",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b0a",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_46",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b0b",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b0b",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_47",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b0d",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b0d",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_48",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b0e",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b0e",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_49",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b0f",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b0f",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_50",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b14",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b14",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_51",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b15",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b15",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_52",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b30",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b30",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_53",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b31",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b31",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_54",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b32",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b32",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_55",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b33",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b33",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_56",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b34",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b34",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_57",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b35",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b35",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_58",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b36",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b36",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_59",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b37",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b37",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_60",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.b38",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.b38",
+}
+
+install_symlink {
+    name: "laurel_wlan_fw_link_61",
+    vendor: true,
+    installed_location: "firmware/ath10k/WCN3990/hw1.0/bdwlan.bin",
+    symlink_target: "/mnt/vendor/laurel_firmware/image/bdwlan.bin",
+}
+
+// Diagnostic launcher; parameters are selected before ath10k probes.
+cc_binary {
+    name: "laurel_wifi_start",
+    vendor: true,
+    srcs: ["laurel_wifi_start.cpp"],
+    static_libs: ["libbase", "libmodprobe"],
+    shared_libs: ["liblog"],
+    cflags: ["-Wall", "-Werror"],
+}

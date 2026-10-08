@@ -1,0 +1,5 @@
+/(vendor|system/vendor)/bin/rmtfs u:object_r:laurel_rmtfs_exec:s0
+/(vendor|system/vendor)/bin/tqftpserv u:object_r:laurel_tqftpserv_exec:s0
+/dev/qcom_rmtfs_mem[0-9]+ u:object_r:laurel_rmtfs_device:s0
+/mnt/vendor/laurel_firmware(/.*)? u:object_r:vendor_firmware_file:s0
+/data/vendor/tmp/tqftpserv(/.*)? u:object_r:laurel_tqftpserv_data_file:s0

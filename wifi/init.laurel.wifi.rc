@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: Apache-2.0
+# This rc is installed only in Android vendor, not recovery's ramdisk.
+on early-init
+    mkdir /mnt/vendor/laurel_firmware 0755 root root
+
+on post-fs-data
+    mkdir /data/vendor/wifi 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
+    mkdir /data/vendor/tmp 0700 root root
+    mkdir /data/vendor/tmp/tqftpserv 0700 root root
+    restorecon_recursive /data/vendor/wifi
+    restorecon_recursive /data/vendor/tmp
+    # Boot/SNOC/QMI/WMI control logs only; avoid per-packet debug flooding.
+    write /sys/module/ath10k_core/parameters/debug_mask 0x00300022
+
+# Diagnostic default: finish Android boot before any radio attempt. The normal
+# post-fs-data path is selected explicitly only after deferred full mode passes.
+on property:sys.boot_completed=1 && property:ro.vendor.laurel.wifi.deferred=true
+    start vendor.laurel-wifi-start
+
+on post-fs-data && property:ro.vendor.laurel.wifi.deferred=false
+    start vendor.laurel-wifi-start
+
+# Userdebug bringup launcher shares the existing root diagnostics policy.
+# It waits for actual QRTR publication, not init service process existence.
+service vendor.laurel-wifi-start /vendor/bin/laurel_wifi_start
+    class core
+    user root
+    group root system
+    seclabel u:r:su:s0
+    stdio_to_kmsg
+    disabled
+    oneshot
+
+service vendor.laurel-tqftpserv /vendor/bin/tqftpserv -d
+    class core
+    user root
+    group system
+    seclabel u:r:laurel_tqftpserv:s0
+    stdio_to_kmsg
+    disabled
+    oneshot
+
+# Publish RMTFS before -s starts the PAS MPSS remoteproc. -r shadows writes
+# in memory: factory modemst/fsg/fsc are never modified by this bringup.
+service vendor.laurel-rmtfs /vendor/bin/rmtfs -o /dev/block/by-name -P -r -s -v
+    class core
+    user root
+    group system
+    seclabel u:r:laurel_rmtfs:s0
+    stdio_to_kmsg
+    disabled
+    oneshot
