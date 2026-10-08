@@ -10,4 +10,5 @@
   <project name="vishwajithkv/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline-6.18" remote="github" revision="7f5e1bde1341d2e400896bdc9e34affe0cccc070" />
   <project name="vishwajithkv/kernel_xiaomi_laurel_sprout-devicetrees" path="kernel/mainline/sm6125-mainline-6.18-devicetrees" remote="github" revision="c9b8307d85c4497ecab64e18629ee3d3392ae74e" />
   <project name="vishwajithkv/kernel_xiaomi_laurel_sprout-modules" path="kernel/mainline/sm6125-mainline-6.18-modules" remote="github" revision="e60b98a44905320191bbd36ca9962dab49f3c8f2" />
+  <project name="LineageOS/android_hardware_mainline_qcom" path="hardware/mainline/qcom" remote="github" revision="27e403da346c84c3ba687fd613e8b15d61f2ba3c" />
 </manifest>

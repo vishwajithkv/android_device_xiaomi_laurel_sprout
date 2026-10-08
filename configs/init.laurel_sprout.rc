@@ -24,5 +24,6 @@ service laurel_boot_logger /system_ext/bin/laurel_boot_logger
     user root
     group root log
     seclabel u:r:su:s0
+    stdio_to_kmsg
     disabled
     oneshot

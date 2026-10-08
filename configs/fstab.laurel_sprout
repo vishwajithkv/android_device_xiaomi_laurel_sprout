@@ -8,3 +8,6 @@
 /dev/block/by-name/metadata /metadata ext4 noatime,nosuid,nodev,discard wait,check,first_stage_mount
 /dev/block/by-name/misc /misc emmc defaults defaults
 /dev/block/by-name/userdata /data f2fs noatime,nosuid,nodev,discard,reserve_root=32768,resgid=1065,fsync_mode=nobarrier latemount,wait,check,quota,reservedsize=128M
+
+# Read only signed device firmware, selected from the active A/B slot.
+/dev/block/by-name/modem /mnt/vendor/laurel_firmware vfat ro,nosuid,nodev,noexec,context=u:object_r:vendor_firmware_file:s0 latemount,wait,slotselect,nofail

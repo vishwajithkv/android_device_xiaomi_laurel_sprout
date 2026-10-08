@@ -74,6 +74,10 @@ int main(int, char** argv) {
         LOG(ERROR) << "Invalid radio stage; radio left stopped";
         return 1;
     }
+    if (access("/mnt/vendor/laurel_firmware/image/modem.mdt", R_OK) != 0) {
+        PLOG(ERROR) << "Active-slot modem firmware unavailable; radio left stopped";
+        return 1;
+    }
     if (!android::base::WaitForProperty("vendor.dlkm.modules.ready", "true", 10s)) {
         LOG(ERROR) << "Mainline module loader not ready";
         return 1;

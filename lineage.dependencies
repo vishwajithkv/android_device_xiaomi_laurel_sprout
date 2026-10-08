@@ -38,5 +38,10 @@
     "repository": "android_prebuilts_mesa-build-dep",
     "target_path": "prebuilts/mesa-build-dep",
     "branch": "1121f16432d25f08db3844588f12e1e2eaf8f42d"
+  },
+  {
+    "repository": "android_hardware_mainline_qcom",
+    "target_path": "hardware/mainline/qcom",
+    "branch": "27e403da346c84c3ba687fd613e8b15d61f2ba3c"
   }
 ]
