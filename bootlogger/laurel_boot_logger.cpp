@@ -57,7 +57,7 @@ struct CaptureStatus {
     std::atomic<uint64_t> read_ms{0}, write_ms{0}, read_bytes{0}, written_bytes{0};
     std::atomic<uint64_t> dropped_records{0}, sequence_gaps{0}, overruns{0};
     std::atomic<int> reader_errno{0}, writer_errno{0};
-    std::atomic<unsigned> reader_phase{0}, writer_phase{0};
+    std::atomic<unsigned> reader_phase{0}, writer_phase{0}, snapshot_phase{0};
 };
 static_assert(std::atomic<uint64_t>::is_always_lock_free);
 static_assert(std::atomic<unsigned>::is_always_lock_free);
@@ -391,6 +391,8 @@ void WriteStatus(const std::string& path, const CaptureStatus* s, int kernel_exi
     out << "monotonic_ms=" << MonotonicMs() << "\n"
         << "reader_phase=" << s->reader_phase.load() << " writer_phase=" << s->writer_phase.load() << "\n"
         << "phase_key=0:idle,1:open,2:io,3:flush,4:finished,5:error\n"
+        << "snapshot_phase=" << s->snapshot_phase.load() << "\n"
+        << "snapshot_key=1:space,2:status,3:logcat_flush,4:state_read,5:state_flush,6:rename\n"
         << "last_read_ms=" << s->read_ms.load() << " last_write_ms=" << s->write_ms.load() << "\n"
         << "read_bytes=" << s->read_bytes.load() << " written_bytes=" << s->written_bytes.load() << "\n"
         << "dropped_records=" << s->dropped_records.load() << " sequence_gaps=" << s->sequence_gaps.load()
@@ -427,6 +429,7 @@ int main() {
     if (kernel == 0) { CaptureKernelLog(directory, status); _exit(0); }
     if (kernel < 0) { fprintf(stderr, "kernel collector fork: %s\n", strerror(errno)); return 1; }
     pid_t logcat = StartLogcat(directory + "/logcat.txt");
+    if (logcat < 0) fprintf(stderr, "laurel_boot_logger: logcat fork failed: %s\n", strerror(errno));
     int kernel_exit = -1, logcat_exit = -1;
     pid_t snapshot = -1;
     int snapshot_exit = -1;
@@ -442,13 +445,16 @@ int main() {
             // SIGKILL does not interrupt an uninterruptible kernel I/O wait.
             // Do not spawn more workers until this one is actually reaped.
             kill(snapshot, SIGKILL);
-            fprintf(stderr, "laurel_boot_logger: snapshot worker blocked; kernel collector independent\n");
+            fprintf(stderr, "laurel_boot_logger: snapshot worker blocked at phase %u; kernel collector independent\n",
+                    status->snapshot_phase.load());
         }
         if (snapshot < 0) {
             snapshot_started = MonotonicMs();
             const unsigned current = sequence++;
             snapshot = fork();
+            if (snapshot < 0) fprintf(stderr, "laurel_boot_logger: snapshot fork failed: %s\n", strerror(errno));
             if (snapshot == 0) {
+                status->snapshot_phase = 1;
                 struct statvfs space {};
                 if (statvfs("/metadata", &space) < 0 ||
                     static_cast<uint64_t>(space.f_bavail) * space.f_frsize < kReserveBytes) {
@@ -463,13 +469,17 @@ int main() {
                     AppendFile(info, "kernel", "/proc/version");
                     AppendFile(info, "build identity", "/vendor/build.prop");
                 }
+                status->snapshot_phase = 2;
                 WriteStatus(directory + "/collector-status.txt", status, kernel_exit, logcat_exit);
                 // Logcat is independent; flush only its current file, not all metadata.
+                status->snapshot_phase = 3;
                 const int log_fd = open((directory + "/logcat.txt").c_str(), O_WRONLY | O_CLOEXEC);
                 if (log_fd >= 0) { fdatasync(log_fd); close(log_fd); }
                 // Commit through rename: a blocked/partial snapshot leaves the last complete one intact.
                 const std::string tmp = directory + "/state.pending";
+                status->snapshot_phase = 4;
                 WriteSnapshot(tmp, current);
+                status->snapshot_phase = 5;
                 const int state_fd = open(tmp.c_str(), O_WRONLY | O_CLOEXEC);
                 if (state_fd >= 0) {
                     struct stat st {};
@@ -479,6 +489,7 @@ int main() {
                 }
                 const int status_fd = open((directory + "/collector-status.txt").c_str(), O_WRONLY | O_CLOEXEC);
                 if (status_fd >= 0) { fdatasync(status_fd); close(status_fd); }
+                status->snapshot_phase = 6;
                 rename(tmp.c_str(), (directory + (current == 0 ? "/initial-state.log" : "/state.log")).c_str());
                 _exit(0);
             }
