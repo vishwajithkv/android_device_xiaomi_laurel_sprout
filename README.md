@@ -1,6 +1,16 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # Xiaomi Mi A3: LineageOS 23.2 with Google ACK 6.18
 
+Wi-Fi candidate (2026-10-08): the default now finishes Android boot before
+loading ath10k with qmi_only=1. It checks the WCN3990 PMU/firmware sequence
+at FW_READY and intentionally exposes no Wi-Fi interface. The boot logger
+now separates kernel reading, writing and state snapshots and records errors.
+Rebuild the complete ROM to install this candidate. See the companion kernel's
+Documentation/android/WIFI_IMPLEMENTATION_20261008.md for stage selection,
+source provenance and the maintainer validation sequence. No new build or
+device result is claimed.
+
+
 Device: laurel_sprout; Qualcomm SM6125 / Snapdragon 665 / Trinket.
 This branch is `lineage-23.2-6.18-split`, using Android 16 userspace.
 
