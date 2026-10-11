@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<manifest>
+  <remove-project name="LineageOS/android_bootable_recovery" optional="true" />
+  <project name="laurel-sprout-mainline/android_bootable_recovery" path="bootable/recovery" remote="github" revision="3e07dbfeafb507457eb953b3337038cb10149c51" />
+  <remove-project name="LineageOS/android_external_drm_hwcomposer-upstream" optional="true" />
+  <project name="laurel-sprout-mainline/android_external_drm_hwcomposer-upstream" path="external/drm_hwcomposer-upstream" remote="github" revision="bf87e20abee7731f59a2df1b7fc9e52201af4fbb" />
+  <remove-project name="LineageOS/android_external_mesa" optional="true" />
+  <project name="laurel-sprout-mainline/android_external_mesa" path="external/mesa" remote="github" revision="37fd285728f414c931438e41d7c6f0c51674931d" />
+  <remove-project name="LineageOS/android_external_zstd" optional="true" />
+  <project name="laurel-sprout-mainline/android_external_zstd" path="external/zstd" remote="github" revision="19cce4b5991ab5baf3eed6c5c42a78f4e0ebfa66" />
+  <remove-project name="LineageOS/android_hardware_interfaces" optional="true" />
+  <project name="laurel-sprout-mainline/android_hardware_interfaces" path="hardware/interfaces" remote="github" revision="f6ad82b8fac31d68bbd55625b6dcde23e5fe1071" />
+  <remove-project name="LineageOS/android_packages_apps_Settings" optional="true" />
+  <project name="laurel-sprout-mainline/android_packages_apps_Settings" path="packages/apps/Settings" remote="github" revision="a4c73561064f88b410fcd47c39e23c16d0d08849" />
+  <remove-project name="LineageOS/android_packages_modules_Connectivity" optional="true" />
+  <project name="laurel-sprout-mainline/android_packages_modules_Connectivity" path="packages/modules/Connectivity" remote="github" revision="70fdb0d2f606d0af2f9b40d83dc020cfa996f881" />
+  <remove-project name="platform/system/connectivity/wificond" optional="true" />
+  <project name="laurel-sprout-mainline/android_system_connectivity_wificond" path="system/connectivity/wificond" remote="github" revision="dc55085ed3fbdf755cbf784c4d4dc9445e7be799" />
+</manifest>

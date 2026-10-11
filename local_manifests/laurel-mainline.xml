@@ -2,13 +2,13 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <manifest>
   <project name="LineageOS/android_device_mainline_common" path="device/mainline/common" remote="github" revision="5c5fd330f4cc0d7214eca65032b03c252b008f82" />
-  <project name="LineageOS/android_hardware_mainline_common" path="hardware/mainline/common" remote="github" revision="6939f596fe349e0531de191eb344c90a03662d26" />
+  <project name="laurel-sprout-mainline/android_hardware_mainline_common" path="hardware/mainline/common" remote="github" revision="eb5240c1fe18d2274983d40bcfb439bd988cd920" />
   <project name="LineageOS/android_kernel_mainline_configs" path="kernel/mainline/configs" remote="github" revision="1bf0c59fb857f4eadd02346f1dafedc4dbcdfafd" />
   <project name="LineageOS/android_external_minigbm-upstream" path="external/minigbm-upstream" remote="github" revision="51b97430ef97474b386bc958d67e5171a86d0d76" />
   <project name="LineageOS/android_external_linux-firmware-mainline" path="external/linux-firmware-mainline" remote="github" revision="ef88d24dfc10e30826789b82fca417d6f913ee2a" />
-  <project name="vishwajithkv/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline" remote="github" revision="63e1f779b9c4c60409b5ac074e5f1ad9050d43af" />
-  <project name="vishwajithkv/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline-6.18" remote="github" revision="f3f89dff184418f4396aad561a4aca71304509d3" />
-  <project name="vishwajithkv/kernel_xiaomi_laurel_sprout-devicetrees" path="kernel/mainline/sm6125-mainline-6.18-devicetrees" remote="github" revision="cca763670a8c2fa68865994119a18fa682d40778" />
-  <project name="vishwajithkv/kernel_xiaomi_laurel_sprout-modules" path="kernel/mainline/sm6125-mainline-6.18-modules" remote="github" revision="412259e19cfbb3baa05c5bd543ca073df09a5abc" />
-  <project name="LineageOS/android_hardware_mainline_qcom" path="hardware/mainline/qcom" remote="github" revision="27e403da346c84c3ba687fd613e8b15d61f2ba3c" />
+  <project name="laurel-sprout-mainline/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline" remote="github" revision="63e1f779b9c4c60409b5ac074e5f1ad9050d43af" />
+  <project name="laurel-sprout-mainline/laurel_sprout_mainline" path="kernel/mainline/sm6125-mainline-6.18" remote="github" revision="f48ff17a2839f0dcf806ee61b97c435b846b70ba" />
+  <project name="laurel-sprout-mainline/kernel_xiaomi_laurel_sprout-devicetrees" path="kernel/mainline/sm6125-mainline-6.18-devicetrees" remote="github" revision="aa1e2bbe0a5dcb181eb09687e772e85540a31cf4" />
+  <project name="laurel-sprout-mainline/kernel_xiaomi_laurel_sprout-modules" path="kernel/mainline/sm6125-mainline-6.18-modules" remote="github" revision="412259e19cfbb3baa05c5bd543ca073df09a5abc" />
+  <project name="laurel-sprout-mainline/android_hardware_mainline_qcom" path="hardware/mainline/qcom" remote="github" revision="53b62da1649e6e1d1fd33fa545c897935b5459b9" />
 </manifest>
