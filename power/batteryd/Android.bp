@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: Apache-2.0
+cc_defaults {
+    name: "laurel_batteryd_defaults",
+    srcs: ["batteryd.cpp"],
+    header_libs: ["laurel_qg_uapi"],
+    shared_libs: ["liblog"],
+    cflags: ["-Wall", "-Wextra", "-Werror"],
+}
+
+cc_binary {
+    name: "laurel-batteryd",
+    vendor: true,
+    defaults: ["laurel_batteryd_defaults"],
+    init_rc: ["laurel-batteryd.rc"],
+}
+
+// Its service definition is in init.recovery.laurel_sprout.rc. Do not
+// install the vendor service RC into recovery or start two SOC writers.
+cc_binary {
+    name: "laurel-batteryd_recovery",
+    stem: "laurel-batteryd",
+    recovery: true,
+    defaults: ["laurel_batteryd_defaults"],
+}

@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+vendor_restricted_prop(laurel_health_config_prop)
+get_prop(hal_health_default, laurel_health_config_prop)
+get_prop(charger_vendor, laurel_health_config_prop)
+recovery_only(`
+    get_prop(recovery, laurel_health_config_prop)
+')

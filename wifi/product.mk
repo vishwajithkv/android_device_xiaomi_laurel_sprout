@@ -3,9 +3,9 @@
 # and nl80211. Do not advertise a qcwcn vendor HAL to upstream ath10k.
 # mainline_common selects the supplicant APEX. Adding standalone wpa_supplicant
 # here would install a second ISupplicant/default VINTF declaration.
-# Retain the diagnostic fallback unless full mode is explicitly selected.
-# Full mode now has validated live 5 GHz association; reboot checks are pending.
-LAUREL_WIFI_STAGE ?= qmi-only
+# Full mode has validated live 5 GHz association. QMI-only remains an explicit
+# diagnostic option; it deliberately never registers a usable WLAN interface.
+LAUREL_WIFI_STAGE ?= full
 LAUREL_WIFI_DEFERRED ?= true
 ifneq ($(words $(LAUREL_WIFI_STAGE)),1)
 $(error LAUREL_WIFI_STAGE must be a single profile)

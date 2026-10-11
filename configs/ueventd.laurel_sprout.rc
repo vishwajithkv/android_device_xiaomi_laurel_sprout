@@ -5,3 +5,6 @@
 /dev/dma_heap/system 0444 system system
 /dev/dma_heap/system-uncached 0444 system system
 /dev/graphics/fb* 0660 system graphics
+
+# One privileged SOC writer; no raw PMIC register access.
+/dev/qcom-qg 0600 root root

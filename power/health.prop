@@ -1,0 +1,3 @@
+# SPDX-License-Identifier: Apache-2.0
+# Physical PMI632 charging capability; exclude the duplicate TCPM source.
+ro.vendor.health.ignore_supply_names=tcpm-source-psy-1c40000.spmi:pmic@2:typec@1500

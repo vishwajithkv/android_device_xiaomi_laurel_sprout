@@ -1,14 +1,28 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # Xiaomi Mi A3: LineageOS 23.2 with Google ACK 6.18
 
+Latest PMIC validation: build #33 restores SOC from SDAM and progresses to
+98% on laptop USB. Wall-adapter fast charging and present battery capacity
+remain unverified. See the companion kernel Documentation/android/PMIC_BUILD_33.md.
+Earlier candidate descriptions below record the implementation history.
+
+Battery source candidate (2026-10-09): the open laurel-batteryd service is
+packaged for Android and recovery, with the companion QG UAPI/counter and
+stock-derived recharge integration. Rebuild kernel and ROM together. This
+candidate is unbuilt and unvalidated. Bounded QC/parallel charging is now a
+source candidate; measured stock parity is still unverified. See the companion
+kernel PMIC_CHARGING_FIX.md and apply its existing-Health-service patch on a fresh sync.
+See [PMIC_SOC_SERVICE.md](../../../kernel/mainline/sm6125-mainline-6.18/Documentation/android/PMIC_SOC_SERVICE.md).
+
 Wi-Fi validation (2026-10-09): correcting the WLAN DT resource removes the
 CE MMIO stall. Live ADB confirms wlan0 registration and, after refreshing
 wificond's initial failed nl80211 discovery, a WPA3-SAE connection on 5 GHz,
 IPv4 assignment and transmitted packets. The helper now publishes nl80211
 readiness after loading the full-mode kernel modules; init restarts wificond
 at that point. Rebuild the complete ROM and verify connection after reboot.
-Select `export LAUREL_WIFI_STAGE=full`; the QMI-only diagnostic default does
-not expose usable Wi-Fi. The wificond split-dump source patch is carried in
+Full Wi-Fi is now the build default. Explicitly select
+`export LAUREL_WIFI_STAGE=full` if an older shell still exports `qmi-only`;
+that diagnostic profile does not expose usable Wi-Fi. The wificond split-dump source patch is carried in
 the kernel's Documentation/android/rom-patches/wificond/ directory and is
 already applied in this workspace. Preserve it for a fresh sync. 2.4 GHz
 association remains unverified. The paragraphs below retain earlier results.
@@ -296,3 +310,5 @@ Wi-Fi, recovery UI and Connectivity BPF changes remain independent.
 Archived display diffs are in out/display-revert-20261008 locally. Matching
 kernel and panel modules must be rebuilt together; no runtime fix is claimed
 until the maintainer validates.
+
+Battery integration now explicitly selects default-aidl health in Android and recovery instead of fabricated Cuttlefish readings. Rebuild the complete matching ROM. Implementation and unfinished stock Quick Charge/capacity learning are documented in kernel/mainline/sm6125-mainline-6.18/Documentation/android/PMIC_BATTERY.md.

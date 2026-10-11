@@ -23,6 +23,11 @@ TARGET_SCREEN_WIDTH := 720
 
 # Bringup options
 TARGET_INITIAL_BRINGUP := true
+# The Cuttlefish bringup HAL fabricates charging and battery measurements.
+# Read PMI632 power_supply telemetry in both Android and recovery instead.
+TARGET_HAS_BATTERY := true
+TARGET_HEALTH_HAL := default-aidl
+PRODUCT_PACKAGES += laurel-batteryd laurel-batteryd_recovery
 TARGET_AUDIO_HAL := default-aidl
 TARGET_CAMERA_PROVIDER_HAL :=
 TARGET_BLUETOOTH_HAL :=

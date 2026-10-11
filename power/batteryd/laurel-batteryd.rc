@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+service vendor.laurel-batteryd /vendor/bin/laurel-batteryd
+    class core
+    user root
+    group root
+    disabled
+    restart_period 5
+
+on post-fs
+    start vendor.laurel-batteryd

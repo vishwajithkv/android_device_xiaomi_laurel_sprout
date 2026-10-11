@@ -6,6 +6,9 @@ MAINLINE_COMMON_PATH := device/mainline/common
 include $(DEVICE_PATH)/configs/graphics-profile.mk
 include $(MAINLINE_COMMON_PATH)/BoardConfigMainlineCommon.mk
 
+# Common already sets TARGET_VENDOR_PROP, so the legacy vendor.prop is not read.
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/power/health.prop
+
 # A/B
 AB_OTA_PARTITIONS += boot system vbmeta vendor
 BOARD_USES_RECOVERY_AS_BOOT := true
@@ -125,3 +128,6 @@ BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 
 # Device-scoped firmware service domains.
 BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/wifi/sepolicy
+
+# Physical battery/charger sysfs labels for the real health HAL.
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/power/sepolicy

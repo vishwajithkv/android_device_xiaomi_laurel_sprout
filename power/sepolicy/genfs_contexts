@@ -1,0 +1,5 @@
+# Physical PMI632 supplies read by the standard Android health service.
+# SPMI parent path confirmed from the connected device's TCPM supply.
+genfscon sysfs /devices/platform/soc@0/1c40000.spmi/spmi-0/0-02/1c40000.spmi:pmic@2:charger@1000/power_supply u:object_r:sysfs_batteryinfo:s0
+genfscon sysfs /devices/platform/soc@0/1c40000.spmi/spmi-0/0-02/1c40000.spmi:pmic@2:fuel-gauge@4800/power_supply u:object_r:sysfs_batteryinfo:s0
+genfscon sysfs /devices/platform/soc@0/1c40000.spmi/spmi-0/0-02/1c40000.spmi:pmic@2:typec@1500/power_supply u:object_r:sysfs_batteryinfo:s0

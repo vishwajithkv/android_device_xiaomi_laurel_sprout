@@ -14,7 +14,7 @@ on post-fs-data
     # Boot/SNOC/QMI/WMI control logs only; avoid per-packet debug flooding.
     write /sys/module/ath10k_core/parameters/debug_mask 0x00300022
 
-# Diagnostic default: finish Android boot before any radio attempt. The normal
+# Deferred default: finish Android boot before any radio attempt. The normal
 # post-fs-data path is selected explicitly only after deferred full mode passes.
 on property:sys.boot_completed=1 && property:ro.vendor.laurel.wifi.deferred=true
     start vendor.laurel-wifi-start

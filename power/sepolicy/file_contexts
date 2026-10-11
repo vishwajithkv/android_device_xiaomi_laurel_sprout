@@ -1,0 +1,3 @@
+# SPDX-License-Identifier: Apache-2.0
+/vendor/bin/laurel-batteryd u:object_r:laurel_batteryd_exec:s0
+/dev/qcom-qg u:object_r:laurel_qg_device:s0

@@ -17,3 +17,15 @@ on boot
     # QTI's recovery HAL is in early_hal; recovery starts only default and hal.
     # Bring it up before update_engine_sideload waits for IBootControl.
     start vendor.boot-qti
+
+# Same open QG policy in recovery; no dependency on Android framework/data.
+service recovery.laurel-batteryd /system/bin/laurel-batteryd
+    class core
+    user root
+    group root
+    seclabel u:r:recovery:s0
+    disabled
+    restart_period 5
+
+on boot
+    start recovery.laurel-batteryd
